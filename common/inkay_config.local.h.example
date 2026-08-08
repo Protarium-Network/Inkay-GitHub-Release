@@ -1,0 +1,34 @@
+#pragma once
+
+// =============================================================================
+// Inkay Custom Configuration Example
+// Copy this file to "inkay_config.local.h" in the same directory to customize
+// server endpoints for self-hosted services or custom network setups.
+// All settings defined here will override the defaults in inkay_config.h.
+// =============================================================================
+
+// Base network domain (default: "pretendo.cc")
+// #define NETWORK_BASEURL "custom-network.example.com"
+
+// Account server host for authentication / NEX proxying
+// #define WSC_ACCOUNT_HOST "account.custom-network.example.com"
+
+// Karaoke U / JOYSOUND Orchestra control service host
+// #define KARAOKE_CONTROL_HOST "karaoke.custom-network.example.com"
+
+// Demae-Can Wii U channel replacement backend
+// #define DEMAECAN_HOST "demaecan.custom-network.example.com"
+
+// Miiverse discovery endpoint (must stay under 38 characters total)
+// #define MIIVERSE_DISCOVERY_URL "disc.custom-network.example.com/v1/endpoint"
+
+// BOSS (Background Online Storage Service / SpotPass) endpoints
+// #define BOSS_NPDI_HOST "npdi.custom-network.example.com"
+// #define BOSS_NPDL_HOST "npdl.custom-network.example.com"
+// #define BOSS_NPFL_HOST "npfl.custom-network.example.com"
+// #define BOSS_NPPL_HOST "nppl.custom-network.example.com"
+// #define BOSS_NPTS_HOST "npts.custom-network.example.com"
+// #define BOSS_SPR_HOST  "spr.custom-network.example.com"
+
+// Call of Duty: Black Ops II (Demonware "ops2" connection server)
+// #define BO2_OPS2_CS_HOST "ops2-wiiu-cs.custom-network.example.com"
