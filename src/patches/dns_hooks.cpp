@@ -50,6 +50,8 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
 
         // Call of Duty: Black Ops II (Wii U) - Demonware "ops2" backend.
         { "ops2-wiiu-cs.prod.demonware.net", BO2_OPS2_CS_HOST },
+        { "ops2-wiiu-auth.prod.demonware.net", BO2_OPS2_AUTH_HOST },
+        { "ops2-wiiu-lobby.prod.demonware.net", BO2_OPS2_LOBBY_HOST },
 };
 
 static const char * replace_dns_name(const char *dns_name) {
