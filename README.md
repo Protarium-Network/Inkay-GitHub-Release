@@ -1,4 +1,4 @@
-# Inkay - Aroma patches for Pretendo
+# Inkay - Aroma patches for Protarium
 
 [![Protarium network logo](https://i.imgur.com/wgSRoyq.jpeg)](https://protarium.lol)
 
