@@ -1,8 +1,8 @@
 # Inkay - Aroma patches for Pretendo
 
-[![Pretendo network logo](https://github.com/PretendoNetwork/website/raw/master/public/assets/images/opengraph/opengraph-image.png)](https://pretendo.network)
+[![Protarium network logo](https://i.imgur.com/wgSRoyq.jpeg)](https://protarium.lol)
 
-Inkay is an Aroma/WUPS plugin that patches various Nintendo Network URLs on a Wii U to use Pretendo Network instead. It also (for the time being) bypasses SSL verification in most cases. It redirects Nintendo Network in:
+Inkay is an Aroma/WUPS plugin that patches various Nintendo Network URLs on a Wii U to use Protarium Network instead. It also (for the time being) bypasses SSL verification in most cases. It redirects Nintendo Network in:
 
 - IOSU-side connections (Friends, SpotPass, accounts etc.)
 - Account Settings
