@@ -14,6 +14,8 @@ Inkay is an Aroma/WUPS plugin that patches various Nintendo Network URLs on a Wi
 Inkay also includes game-specific patches to add extra features:
 - Modpack-specific matchmaking for global, regional rooms (by simulating extra DLC) - **Mario Kart 8**
 - P2P port override for better connection stability (if you port forward) - **Minecraft: Wii U Edition**, **Mario Kart 8**, **Splatoon**
+- 100 Mario Challenge pickup-service redirection - **Super Mario Maker**
+- Demonware service redirection - **Call of Duty: Black Ops II**
 
 ## Requirements
 Inkay is only supported on the release version of Aroma configured for autoboot/coldboot. Other configurations (specifically lacking coldboot) may cause issues with SpotPass.

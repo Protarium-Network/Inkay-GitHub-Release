@@ -26,6 +26,11 @@
 #define KARAOKE_CONTROL_HOST WSC_ACCOUNT_HOST
 #endif
 
+// Super Mario Maker's 100 Mario Challenge playlist service.
+#ifndef SMM_PICKUP_HOST
+#define SMM_PICKUP_HOST "ama." NETWORK_BASEURL
+#endif
+
 // Demae-Can Wii U channel replacement backend (see dns_hooks.cpp).
 #ifndef DEMAECAN_HOST
 #define DEMAECAN_HOST "demaecan." NETWORK_BASEURL
@@ -66,6 +71,12 @@
 // (dns_hooks.cpp). Real host is ops2-wiiu-cs.prod.demonware.net.
 #ifndef BO2_OPS2_CS_HOST
 #define BO2_OPS2_CS_HOST "ops2-wiiu-cs." NETWORK_BASEURL
+#endif
+#ifndef BO2_OPS2_AUTH_HOST
+#define BO2_OPS2_AUTH_HOST "ops2-wiiu-auth." NETWORK_BASEURL
+#endif
+#ifndef BO2_OPS2_LOBBY_HOST
+#define BO2_OPS2_LOBBY_HOST "ops2-wiiu-lobby." NETWORK_BASEURL
 #endif
 
 #endif //INKAY_INKAY_CONFIG_H

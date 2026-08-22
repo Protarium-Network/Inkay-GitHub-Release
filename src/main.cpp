@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0"
+#define INKAY_VERSION "v3.1.0-protarium-smm100-r13"
 
 /**
     Mandatory plugin information.

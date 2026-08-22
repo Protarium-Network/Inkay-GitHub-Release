@@ -16,6 +16,9 @@
 // Karaoke U / JOYSOUND Orchestra control service host
 // #define KARAOKE_CONTROL_HOST "karaoke.custom-network.example.com"
 
+// Super Mario Maker 100 Mario Challenge pickup service
+// #define SMM_PICKUP_HOST "ama.custom-network.example.com"
+
 // Demae-Can Wii U channel replacement backend
 // #define DEMAECAN_HOST "demaecan.custom-network.example.com"
 
@@ -32,3 +35,5 @@
 
 // Call of Duty: Black Ops II (Demonware "ops2" connection server)
 // #define BO2_OPS2_CS_HOST "ops2-wiiu-cs.custom-network.example.com"
+// #define BO2_OPS2_AUTH_HOST "ops2-wiiu-auth.custom-network.example.com"
+// #define BO2_OPS2_LOBBY_HOST "ops2-wiiu-lobby.custom-network.example.com"

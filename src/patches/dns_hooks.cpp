@@ -35,6 +35,10 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         // Karaoke U / JOYSOUND Orchestra control service
         { "ssl.wahp.wah.wup.app.nintendo.net", KARAOKE_CONTROL_HOST },
 
+        // Super Mario Maker fetches its 100 Mario Challenge course pool from
+        // this HTTPS service rather than through NEX.
+        { "wup-ama.app.nintendo.net", SMM_PICKUP_HOST },
+
         // Demae-Can Wii U channel replacement backend
         { "nws.demae-can.com", DEMAECAN_HOST },
 
