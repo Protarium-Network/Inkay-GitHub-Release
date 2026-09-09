@@ -20,6 +20,7 @@
 #include "config.h"
 #include "utils/logger.h"
 #include "inkay_config.h"
+#include "bo2_auth.h"
 #include <array>
 #include <vector>
 #include <cstring>
@@ -61,6 +62,12 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
 static const char * replace_dns_name(const char *dns_name) {
     if (!Config::connect_to_network || !dns_name) {
         return dns_name;
+    }
+
+    if (strstr(dns_name, "demonware.net") != nullptr) {
+        // BO2's multiplayer RPL is loaded by the time it resolves Demonware, so
+        // applying the auth-compatibility patch here avoids hooking the loader.
+        patch_bo2_auth();
     }
 
     for (auto [original, replacement] : dns_replacements) {

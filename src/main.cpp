@@ -64,6 +64,7 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/eshop_applet.h"
 #include "patches/olv_applet.h"
 #include "patches/game_peertopeer.h"
+#include "patches/bo2_auth.h"
 #include "sysconfig.h"
 #include "lang.h"
 
@@ -216,6 +217,7 @@ WUMS_APPLICATION_STARTS() {
 WUMS_ALL_APPLICATION_STARTS_DONE() {
     // we need to do the patches here because otherwise the Config::connect_to_network flag might be set yet
     setup_olv_libs();
+    patch_bo2_auth();
     peertopeer_patch();
     matchmaking_notify_titleswitch();
     hotpatchAccountSettings();
