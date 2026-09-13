@@ -27,6 +27,13 @@ Inkay is only supported on the release version of Aroma configured for autoboot/
 - Grab the latest release from here: https://github.com/Protarium-Network/Inkay-GitHub-Release/releases and download the premade wiiu.zip.
 - Insert your SDcard from your Wii U into your PC.
 - Drag and drop the wiiu folder from the zip inside on your SDcard.
+
+## Installation (If you've never used pretendo or Aroma before)
+- Follow the Aroma install guide on https://wiiu.hacks.guide/
+- Grab the latest release from here: https://github.com/Protarium-Network/Inkay-GitHub-Release/releases and download the premade wiiu.zip.
+- Insert your SDcard from your Wii U into your PC.
+- Drag and drop the wiiu folder from the zip inside on your SDcard.
+
 - All done! If you encounter any issues join the discord server here: https://discord.gg/h5XSJtRnfZ
 
 ## Safety
