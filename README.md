@@ -24,17 +24,17 @@ Inkay also includes game-specific patches to add extra features:
 Inkay is only supported on the release version of Aroma configured for autoboot/coldboot. Other configurations (specifically lacking coldboot) may cause issues with SpotPass.
 
 ## Installation - If you had pretendo before:
-- Grab the latest release from here: https://github.com/Protarium-Network/Inkay-GitHub-Release/releases and download the premade wiiu.zip.
+- Grab the latest release from [here](https://github.com/Protarium-Network/Inkay-GitHub-Release/releases) and download the premade wiiu.zip.
 - Insert your SDcard from your Wii U into your PC.
 - Drag and drop the wiiu folder from the zip inside on your SDcard.
 
 ## Installation (If you've never used pretendo or Aroma before)
-- Follow the Aroma install guide on https://wiiu.hacks.guide/
-- Grab the latest release from here: https://github.com/Protarium-Network/Inkay-GitHub-Release/releases and download the premade wiiu.zip.
+- Follow the Aroma install guide [here](https://wiiu.hacks.guide/)
+- Grab the latest release from [here](https://github.com/Protarium-Network/Inkay-GitHub-Release/releases) and download the premade wiiu.zip.
 - Insert your SDcard from your Wii U into your PC.
 - Drag and drop the wiiu folder from the zip inside on your SDcard.
 
-- All done! If you encounter any issues join the discord server here: https://discord.gg/h5XSJtRnfZ
+- All done! If you encounter any issues join the discord server [here](https://discord.gg/h5XSJtRnfZ)
 
 ## Safety
 Inkay's patches are all temporary, and only applied in-memory without modifying your console. The SSL patch, while also temporary, could reduce the overall security of your console while active - this is because it no longer checks if a server is verified. However, this does not apply to the Internet Browser, where SSL still works as expected.
@@ -60,4 +60,4 @@ Inkay has the following dependencies aside from devkitPPC and wut:
 Each of these should be `make install`-able. After that, you can compile Inkay with `make`.
 
 ## TODO
-See [Issues](https://github.com/PretendoNetwork/Inkay/issues).
+See [Issues](https://github.com/Protarium-Network/Inkay-GitHub-Release/issues).
