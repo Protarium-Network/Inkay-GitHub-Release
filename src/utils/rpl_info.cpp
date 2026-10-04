@@ -34,7 +34,7 @@ std::optional<OSDynLoad_NotifyData> search_for_rpl(std::string_view name) {
         return std::nullopt;
 
     auto rpl = std::find_if(rpls.begin(), rpls.end(), [=](const OSDynLoad_NotifyData &rpl) {
-        return std::string_view(rpl.name).ends_with(name);
+        return rpl.name && std::string_view(rpl.name).ends_with(name);
     });
     if (rpl == rpls.end())
         return std::nullopt;

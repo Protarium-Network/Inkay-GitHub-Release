@@ -1,6 +1,6 @@
 # Inkay - Aroma patches for Protarium
 
-[![Protarium network logo](https://i.imgur.com/wgSRoyq.jpeg)](https://protarium.lol)
+![Protarium network logo](https://i.imgur.com/wgSRoyq.jpeg)
 
 Inkay is an Aroma/WUPS plugin that patches various Nintendo Network URLs on a Wii U to use Protarium Network instead. It also (for the time being) bypasses SSL verification in most cases. It redirects Nintendo Network in:
 

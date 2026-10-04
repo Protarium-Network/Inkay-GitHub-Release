@@ -16,6 +16,7 @@
 #include "game_peertopeer.h"
 
 #include "config.h"
+#include "Notification.h"
 #include "sysconfig.h"
 #include "utils/logger.h"
 #include "utils/rpl_info.h"
@@ -114,13 +115,78 @@ static void minecraft_peertopeer_patch() {
     // blr
 }
 
+static void sonic_transformed_peertopeer_patch() {
+    // Sonic & All-Stars Racing Transformed update RPX (SART.rpx), SHA-256:
+    // 9B74170C82296223B10581A7C336AF7B9BB904C5C08E8567C3A48CA3C040C957
+    //
+    // NEX uses both RootTransport::GetWellKnownPortNumber() and
+    // RootTransport::GetNextPortNumber() while preparing NAT traversal. The
+    // latter normally selects a random port in 0xc000..0xffff, which makes the
+    // station URL disagree with the stable port forwarded by Inkay.
+    constexpr uint32_t get_well_known_port = 0x02de4598;
+    constexpr uint32_t get_next_port = 0x02de4b5c;
+
+    std::optional<OSDynLoad_NotifyData> sonic = search_for_rpl("SART.rpx"sv);
+    if (!sonic) {
+        DEBUG_FUNCTION_LINE("Couldn't find Sonic Transformed rpx!");
+        return;
+    }
+
+    auto *well_known = (uint32_t *) rpl_addr(*sonic, get_well_known_port);
+    auto *next = (uint32_t *) rpl_addr(*sonic, get_next_port);
+
+    constexpr std::array<uint32_t, 3> well_known_original = {
+        0x3c601032, // lis r3, 0x1032
+        0x386319d8, // addi r3, r3, 0x19d8
+        0x4bfba934, // b RootTransport well-known-port storage getter
+    };
+    constexpr std::array<uint32_t, 3> next_original = {
+        0x7c0802a6, // mflr r0
+        0x90010004, // stw r0, 4(r1)
+        0x38603fff, // li r3, 0x3fff (random range size)
+    };
+
+    if (!std::equal(well_known_original.begin(), well_known_original.end(), well_known) ||
+        !std::equal(next_original.begin(), next_original.end(), next)) {
+        DEBUG_FUNCTION_LINE("Sonic Transformed P2P patch skipped: unexpected instructions");
+        ShowNotification("Sonic Racing: P2P patch address mismatch");
+        return;
+    }
+
+    const uint16_t port = get_console_peertopeer_port();
+    const std::array<uint32_t, 3> fixed_port_return = {
+        0x3c600000,             // lis r3, 0
+        0x60630000 | static_cast<uint32_t>(port), // ori r3, r3, port
+        0x4e800020,             // blr
+    };
+
+    bool applied = true;
+    for (size_t i = 0; i < fixed_port_return.size(); i++) {
+        applied &= replace_instruction(&well_known[i], well_known_original[i], fixed_port_return[i]);
+        applied &= replace_instruction(&next[i], next_original[i], fixed_port_return[i]);
+    }
+
+    if (applied) {
+        DEBUG_FUNCTION_LINE("Sonic Transformed fixed P2P port patch applied: %u", port);
+        ShowNotification("Sonic Racing: fixed P2P port patch applied");
+    } else {
+        DEBUG_FUNCTION_LINE("Sonic Transformed P2P patch failed while writing instructions");
+        ShowNotification("Sonic Racing: P2P patch failed");
+    }
+}
+
 void peertopeer_patch() {
     if (!Config::connect_to_network) {
         return;
     }
 
     uint64_t tid = OSGetTitleID();
-    if (tid == 0x00050000'101D7500 || // EUR
+    if (tid == 0x00050000'1010B300 || // Sonic Transformed USA
+        tid == 0x00050000'10111F00 || // Sonic Transformed EUR
+        tid == 0x00050000'1015B400) { // Sonic Transformed JPN
+
+        sonic_transformed_peertopeer_patch();
+    } else if (tid == 0x00050000'101D7500 || // EUR
         tid == 0x00050000'101D9D00 || // USA
         tid == 0x00050000'101DBE00) { // JPN
 

@@ -16,11 +16,14 @@
 */
 
 #include <netdb.h>
+#include <strings.h>
 
 #include "config.h"
 #include "utils/logger.h"
 #include "inkay_config.h"
 #include "bo2_auth.h"
+#include "justdance_cert.h"
+#include "Notification.h"
 #include <array>
 #include <vector>
 #include <cstring>
@@ -39,6 +42,20 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         // Super Mario Maker fetches its 100 Mario Challenge course pool from
         // this HTTPS service rather than through NEX.
         { "wup-ama.app.nintendo.net", SMM_PICKUP_HOST },
+
+        // Lost Reavers (BNEI) - DNS-only, cos.xml stays on the original
+        // hostname/HTTPS/443 (see lost_reavers_url.cpp).
+        { "mars.project-treasure.bng.jp", LOST_REAVERS_HOST },
+
+        // Just Dance 2016-2018 World Dance Floor (UbiServices + JMCS over HTTPS).
+        { "jmcs-prod.just-dance.com", JD_WDF_HOST },
+        { "api-ubiservices.ubi.com", JD_WDF_HOST },
+        { "public-ubiservices.ubi.com", JD_WDF_HOST },
+
+        // Need for Speed Most Wanted U: redirector (42127) answers with the game
+        // server address; gosca (44125) is the CA-cert HTTP fetch.
+        { "gosredirector.ea.com", NFS_BLAZE_HOST },
+        { "gosca.ea.com", NFS_BLAZE_HOST },
 
         // Demae-Can Wii U channel replacement backend
         { "nws.demae-can.com", DEMAECAN_HOST },
@@ -75,6 +92,17 @@ static const char * replace_dns_name(const char *dns_name) {
             DEBUG_FUNCTION_LINE_VERBOSE("Inkay/DNS: Redirecting %s -> %s", dns_name, replacement);
             return replacement;
         }
+    }
+
+    // Just Dance: catch env-prefixed UbiServices hosts (PreProd...) and any other
+    // JMCS subdomain. Broad - also grabs UbiServices for other Ubisoft Wii U
+    // titles; narrow to a JD title check if that ever bites.
+    if (strcasestr(dns_name, "ubiservices.ubi.com") != nullptr ||
+        strcasestr(dns_name, "just-dance.com") != nullptr) {
+        // The engine RPX is loaded by the time it resolves UbiServices; apply
+        // the TLS cert-check bypass here (idempotent).
+        patch_justdance_cert();
+        return JD_WDF_HOST;
     }
 
     return dns_name;

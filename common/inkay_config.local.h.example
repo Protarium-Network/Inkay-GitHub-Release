@@ -37,3 +37,16 @@
 // #define BO2_OPS2_CS_HOST "ops2-wiiu-cs.custom-network.example.com"
 // #define BO2_OPS2_AUTH_HOST "ops2-wiiu-auth.custom-network.example.com"
 // #define BO2_OPS2_LOBBY_HOST "ops2-wiiu-lobby.custom-network.example.com"
+
+// Just Dance World Dance Floor (UbiServices + JMCS)
+// #define JD_WDF_HOST "jd.custom-network.example.com"
+
+// Lost Reavers
+// #define LOST_REAVERS_HOST "mars.project.custom-network.example.com"
+// #define LOST_REAVERS_BASE_URL "http://mars.project.custom-network.example.com"
+
+// Need for Speed Most Wanted U (EA Blaze) - DNS-only record
+// #define NFS_BLAZE_HOST "nfs.custom-network.example.com"
+
+// Miiverse browser allowlist domain
+// #define OLV_BASEURL "custom-network.example.com"

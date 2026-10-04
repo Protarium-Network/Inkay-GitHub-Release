@@ -17,6 +17,7 @@
 */
 
 #include "config.h"
+#include "olv_applet.h"
 #include "olv_urls.h"
 #include "utils/logger.h"
 #include "utils/replace_mem.h"
@@ -46,7 +47,7 @@ constexpr struct olv_allowlist original_entry = {
 
 constexpr struct olv_allowlist new_entry = {
     .scheme = "https",
-    .domain = "." NETWORK_BASEURL,
+    .domain = "." OLV_BASEURL,
     .path = "",
     .flags = {1, 1, 1, 1, 1},
 };
@@ -95,10 +96,19 @@ DECL_FUNCTION(int, FSOpenFile, FSClient *client, FSCmdBlock *block, char *path, 
 
         DEBUG_FUNCTION_LINE_VERBOSE("Inkay: hewwo!\n");
 
-        auto olv_ok = setup_olv_libs();
-        // Patch applet binary too
-        if (olv_ok)
-            replace(0x10000000, 0x10000000, (const char *)&original_entry, sizeof(original_entry), (const char *)&new_entry, sizeof(new_entry));
+        // A previous applet may have ended before its CA handle was observed
+        // closing. Never carry that handle into a new Miiverse instance.
+        rootca_pem_handle.reset();
+
+        // The OLV RPL is not guaranteed to be loaded yet on a later applet
+        // launch. Its load callback will patch the discovery URL when needed,
+        // but the freshly-created browser allowlist must be patched now on
+        // every opening. Gating this on setup_olv_libs() caused the second
+        // Miiverse launch to remain on the loading screen.
+        setup_olv_libs();
+        replace(0x10000000, 0x10000000,
+                (const char *)&original_entry, sizeof(original_entry),
+                (const char *)&new_entry, sizeof(new_entry));
         // Check for root CA file and take note of its handle
     } else if (strcmp("vol/content/browser/rootca.pem", path) == 0) {
         int ret = real_FSOpenFile(client, block, path, mode, handle, error);
@@ -157,4 +167,11 @@ void unpatchOlvApplet() {
         FunctionPatcher_RemoveFunctionPatch(handle);
     }
     olv_patches.clear();
+    resetOlvAppletState();
+}
+
+void resetOlvAppletState() {
+    // File handles belong to a process/app instance and may be reused by the
+    // next Miiverse launch. Never retain one across an application boundary.
+    rootca_pem_handle.reset();
 }

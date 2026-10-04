@@ -18,3 +18,4 @@
 
 void patchOlvApplet();
 void unpatchOlvApplet();
+void resetOlvAppletState();

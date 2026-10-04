@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-smm100-r13"
+#define INKAY_VERSION "v3.1.0-protarium-smm100-jd-lr-nfs-r14"
 
 /**
     Mandatory plugin information.
@@ -65,6 +65,8 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/olv_applet.h"
 #include "patches/game_peertopeer.h"
 #include "patches/bo2_auth.h"
+#include "patches/justdance_cert.h"
+#include "patches/lost_reavers_url.h"
 #include "sysconfig.h"
 #include "lang.h"
 
@@ -173,6 +175,7 @@ static void Inkay_Initialize(bool apply_patches, bool show_startup_toast, inkay_
         patchOlvApplet();
         patchAccountSettings();
         install_matchmaking_patches();
+        patch_lost_reavers_url();
     } else {
         DEBUG_FUNCTION_LINE("FunctionPatcher_InitLibrary failed");
     }
@@ -198,6 +201,7 @@ WUMS_DEINITIALIZE() {
     unpatchOlvApplet();
     unpatchAccountSettings();
     remove_matchmaking_patches();
+    unpatch_lost_reavers_url();
 
     Mocha_DeInitLibrary();
     NotificationModule_DeInitLibrary();
@@ -212,12 +216,14 @@ WUMS_APPLICATION_STARTS() {
 
     // Reset plugin loaded flag
     Config::plugin_is_loaded = false;
+    resetOlvAppletState();
 }
 
 WUMS_ALL_APPLICATION_STARTS_DONE() {
     // we need to do the patches here because otherwise the Config::connect_to_network flag might be set yet
     setup_olv_libs();
     patch_bo2_auth();
+    patch_justdance_cert();
     peertopeer_patch();
     matchmaking_notify_titleswitch();
     hotpatchAccountSettings();
@@ -239,6 +245,7 @@ WUMS_ALL_APPLICATION_STARTS_DONE() {
 }
 
 WUMS_APPLICATION_ENDS() {
+    resetOlvAppletState();
 }
 
 WUMS_EXPORT_FUNCTION(Inkay_Initialize);

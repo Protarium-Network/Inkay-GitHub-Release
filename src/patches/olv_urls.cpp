@@ -42,12 +42,29 @@ bool check_olv_libs() {
     return false;
 }
 
-#define OLV_RPL "nn_olv.rpl"
 bool path_is_olv(const char* path) {
-    auto path_len = strlen(path);
-    auto* path_suffix = path + path_len - (sizeof(OLV_RPL) - 1); //1 for null
-    return strcmp(path_suffix, OLV_RPL) == 0;
+    if (!path) return false;
+
+    const char *olv_names[] = {"nn_olv.rpl", "nn_olv2.rpl"};
+    const auto path_len = strlen(path);
+    for (const char *name: olv_names) {
+        const auto suffix_len = strlen(name);
+        if (path_len >= suffix_len && strcmp(path + path_len - suffix_len, name) == 0) {
+            return true;
+        }
+    }
+    return false;
 }
+
+static bool memory_contains(uint32_t start, uint32_t size, const char *value, size_t value_size) {
+    if (!value || value_size == 0 || value_size > size) return false;
+    for (uint32_t addr = start; addr <= start + size - value_size; addr++) {
+        if (memcmp(value, reinterpret_cast<const void *>(addr), value_size) == 0) return true;
+    }
+    return false;
+}
+
+static bool notify_callback_registered = false;
 
 void new_rpl_loaded(OSDynLoad_Module module, void* ctx, OSDynLoad_NotifyReason reason, OSDynLoad_NotifyData* rpl) {
     if (!Config::connect_to_network) {
@@ -57,7 +74,7 @@ void new_rpl_loaded(OSDynLoad_Module module, void* ctx, OSDynLoad_NotifyReason r
 
     // Loaded olv?
     if (reason != OS_DYNLOAD_NOTIFY_LOADED) return;
-    if (!rpl->name || !path_is_olv(rpl->name)) return;
+    if (!rpl || !path_is_olv(rpl->name)) return;
 
     replace(rpl->dataAddr, rpl->dataSize, original_url, sizeof(original_url), new_url, sizeof(new_url));
 }
@@ -68,7 +85,13 @@ bool setup_olv_libs() {
         return false;
     }
 
-    OSDynLoad_AddNotifyCallback(&new_rpl_loaded, nullptr);
+    // setup_olv_libs is called both when an application starts and whenever
+    // Miiverse opens. Registering the same callback repeatedly makes every
+    // subsequent applet launch process the same RPL more than once.
+    if (!notify_callback_registered) {
+        OSDynLoad_AddNotifyCallback(&new_rpl_loaded, nullptr);
+        notify_callback_registered = true;
+    }
 
     auto olvLoaded = check_olv_libs();
     if (!olvLoaded) {
@@ -83,5 +106,10 @@ bool setup_olv_libs() {
         return false;
     }
 
-    return replace(base_addr, size, original_url, sizeof(original_url), new_url, sizeof(new_url));
+    if (replace(base_addr, size, original_url, sizeof(original_url), new_url, sizeof(new_url))) return true;
+
+    // On the second Miiverse opening the OLV module is often retained in MEM2
+    // and already contains our endpoint. That is a valid state: the applet
+    // allowlist still has to be patched again for the new browser instance.
+    return memory_contains(base_addr, size, new_url, sizeof(new_url));
 }

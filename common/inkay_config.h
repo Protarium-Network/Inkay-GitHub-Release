@@ -79,4 +79,30 @@
 #define BO2_OPS2_LOBBY_HOST "ops2-wiiu-lobby." NETWORK_BASEURL
 #endif
 
+// Miiverse browser allowlist domain (olv_applet.cpp). Defaults to the network base URL.
+#ifndef OLV_BASEURL
+#define OLV_BASEURL NETWORK_BASEURL
+#endif
+
+// Just Dance 2015-2019 World Dance Floor: UbiServices + JMCS are DNS-redirected to
+// this host (original Host header is preserved) - see dns_hooks.cpp.
+#ifndef JD_WDF_HOST
+#define JD_WDF_HOST "jd." NETWORK_BASEURL
+#endif
+
+// Lost Reavers (BNEI): DNS redirect target for mars.project-treasure.bng.jp, and
+// the plain-HTTP base URL used by lost_reavers_url.cpp.
+#ifndef LOST_REAVERS_HOST
+#define LOST_REAVERS_HOST "mars.project." NETWORK_BASEURL
+#endif
+#ifndef LOST_REAVERS_BASE_URL
+#define LOST_REAVERS_BASE_URL "http://mars.project." NETWORK_BASEURL
+#endif
+
+// Need for Speed Most Wanted U (EA Blaze): raw-TCP redirector + CA fetch. Must be
+// a DNS-only (non-proxied) record.
+#ifndef NFS_BLAZE_HOST
+#define NFS_BLAZE_HOST "nfs." NETWORK_BASEURL
+#endif
+
 #endif //INKAY_INKAY_CONFIG_H
