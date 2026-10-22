@@ -23,16 +23,16 @@
 #include "config.h"
 #include "module.h"
 
-#define INKAY_VERSION "v3.1.0"
+#define INKAY_VERSION "v3.1.0-protarium-online-r17"
 
 /**
     Mandatory plugin information.
     If not set correctly, the loader will refuse to use the plugin.
 **/
-WUPS_PLUGIN_NAME("Inkay");
-WUPS_PLUGIN_DESCRIPTION("Pretendo Network Patcher");
+WUPS_PLUGIN_NAME("Protarium");
+WUPS_PLUGIN_DESCRIPTION("Protarium Network Patcher");
 WUPS_PLUGIN_VERSION(INKAY_VERSION);
-WUPS_PLUGIN_AUTHOR("Pretendo contributors");
+WUPS_PLUGIN_AUTHOR("Protarium Network, Pretendo contributors");
 WUPS_PLUGIN_LICENSE("GPLv3");
 
 WUPS_USE_STORAGE("inkay");

@@ -280,7 +280,7 @@ static void ConfigMenuClosedCallback() {
 void Config::Init() {
     // Init the config api
     WUPSConfigAPIStatus cres =
-            WUPSConfigAPI_Init({.name = "Inkay"}, ConfigMenuOpenedCallback, ConfigMenuClosedCallback);
+            WUPSConfigAPI_Init({.name = "Protarium"}, ConfigMenuOpenedCallback, ConfigMenuClosedCallback);
     if (cres != WUPSCONFIG_API_RESULT_SUCCESS) return (void) report_error(cres, __LINE__);
 
     WUPSStorageError res;

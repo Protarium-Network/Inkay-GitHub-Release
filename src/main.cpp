@@ -39,16 +39,16 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-smm100-jd-lr-nfs-r14"
+#define INKAY_VERSION "v3.1.0-protarium-online-r17"
 
 /**
     Mandatory plugin information.
     If not set correctly, the loader will refuse to use the plugin.
 **/
 WUMS_MODULE_EXPORT_NAME("inkay");
-WUMS_MODULE_DESCRIPTION("Pretendo Network Patcher");
+WUMS_MODULE_DESCRIPTION("Protarium Network Patcher");
 WUMS_MODULE_VERSION(INKAY_VERSION);
-WUMS_MODULE_AUTHOR("Pretendo contributors");
+WUMS_MODULE_AUTHOR("Protarium Network, Pretendo contributors");
 WUMS_MODULE_LICENSE("GPLv3");
 
 WUMS_DEPENDS_ON(homebrew_functionpatcher);
@@ -132,7 +132,7 @@ static void Inkay_Initialize(bool apply_patches, bool show_startup_toast, inkay_
     Config::show_startup_toast = show_startup_toast;
 
     if (Config::block_initialize) {
-        ShowNotification("Cannot load Inkay while the system is running. Please restart the console");
+        ShowNotification("Cannot load Protarium while the system is running. Please restart the console");
         return;
     }
 
@@ -153,14 +153,14 @@ static void Inkay_Initialize(bool apply_patches, bool show_startup_toast, inkay_
         // IOS-NIM-BOSS GlobalPolicyList->state: poking this forces a refresh after we changed the url
         Mocha_IOSUKernelWrite32(0xE24B3D90, 4);
 
-        DEBUG_FUNCTION_LINE_VERBOSE("Pretendo URL and NoSSL patches applied successfully.");
+        DEBUG_FUNCTION_LINE_VERBOSE("Protarium URL and NoSSL patches applied successfully.");
 
         if (Config::show_startup_toast) {
             ShowNotification(get_pretendo_message(language));
         }
         Config::initialized = true;
     } else {
-        DEBUG_FUNCTION_LINE_VERBOSE("Pretendo URL and NoSSL patches skipped.");
+        DEBUG_FUNCTION_LINE_VERBOSE("Protarium URL and NoSSL patches skipped.");
 
         if(Config::show_startup_toast) {
             ShowNotification(get_nintendo_network_message(language));
@@ -231,12 +231,12 @@ WUMS_ALL_APPLICATION_STARTS_DONE() {
     if (Config::initialized && !Config::plugin_is_loaded) {
         DEBUG_FUNCTION_LINE("Inkay is running but the plugin got unloaded");
         if (!Config::block_initialize) {
-            ShowNotification("Inkay module is still running. Please restart the console");
+            ShowNotification("Protarium module is still running. Please restart the console");
         }
         Config::shown_warning = true;
     } else if (!Config::initialized && !Config::shown_warning) {
         DEBUG_FUNCTION_LINE("Inkay module not initialized");
-        ShowNotification("Inkay module was not initialized. Ensure you have the Inkay plugin loaded");
+        ShowNotification("Protarium module was not initialized. Ensure you have the Protarium plugin loaded");
         Config::shown_warning = true;
     }
     if (!Config::initialized) {

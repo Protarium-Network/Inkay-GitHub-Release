@@ -105,4 +105,9 @@
 #define NFS_BLAZE_HOST "nfs." NETWORK_BASEURL
 #endif
 
+// Monster Hunter 3 Ultimate (Capcom Goshawk) DNS redirect target.
+#ifndef MH3U_GOSHAWK_HOST
+#define MH3U_GOSHAWK_HOST "mh3u." NETWORK_BASEURL
+#endif
+
 #endif //INKAY_INKAY_CONFIG_H

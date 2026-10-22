@@ -43,6 +43,9 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         // this HTTPS service rather than through NEX.
         { "wup-ama.app.nintendo.net", SMM_PICKUP_HOST },
 
+        // Monster Hunter 3 Ultimate online/DLC bootstrap (original Host header kept).
+        { "goshawk.capcom.co.jp", MH3U_GOSHAWK_HOST },
+
         // Lost Reavers (BNEI) - DNS-only, cos.xml stays on the original
         // hostname/HTTPS/443 (see lost_reavers_url.cpp).
         { "mars.project-treasure.bng.jp", LOST_REAVERS_HOST },
@@ -74,6 +77,15 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         { "ops2-wiiu-cs.prod.demonware.net", BO2_OPS2_CS_HOST },
         { "ops2-wiiu-auth.prod.demonware.net", BO2_OPS2_AUTH_HOST },
         { "ops2-wiiu-lobby.prod.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "ops2-wiiu-auth.demonware.net", BO2_OPS2_AUTH_HOST },
+        { "ops2-wiiu-lobby.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "ops2-wiiu-cs.demonware.net", BO2_OPS2_CS_HOST },
+        { "ops2-wiiu-lsg.prod.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "ops2-wiiu-lsg.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "ops2-wiiu-stun.prod.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "ops2-wiiu-stun.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "cod7-stun.eu.demonware.net", BO2_OPS2_LOBBY_HOST },
+        { "stun.eu.demonware.net", BO2_OPS2_LOBBY_HOST },
 };
 
 static const char * replace_dns_name(const char *dns_name) {
@@ -92,6 +104,13 @@ static const char * replace_dns_name(const char *dns_name) {
             DEBUG_FUNCTION_LINE_VERBOSE("Inkay/DNS: Redirecting %s -> %s", dns_name, replacement);
             return replacement;
         }
+    }
+
+    // Any other Demonware domain (regional/stun/umbrella...) falls back to the ops2 endpoints.
+    if (strcasestr(dns_name, "demonware.net") != nullptr) {
+        if (strcasestr(dns_name, "auth") != nullptr) return BO2_OPS2_AUTH_HOST;
+        if (strcasestr(dns_name, "cs") != nullptr || strcasestr(dns_name, "content") != nullptr) return BO2_OPS2_CS_HOST;
+        return BO2_OPS2_LOBBY_HOST;
     }
 
     // Just Dance: catch env-prefixed UbiServices hosts (PreProd...) and any other

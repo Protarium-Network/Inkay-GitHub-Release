@@ -1,6 +1,6 @@
 # UNBOUND_PLUGIN_RELEASE_V1
 # PLUGIN_KEY|REVISION|VERSION|DOWNLOAD_URL|ARCHIVE_SHA256|ARCHIVE_BYTES
-PROTARIUM|12|v3.1.0-protarium-jd|https://github.com/Protarium-Network/Inkay-GitHub-Release/releases/download/v3.1.0-protarium-jd/wiiu.zip|2ed3c47381e50f8284ea96b51440af16d773b6da4624d21718ec1f2be6f087fc|181519
+PROTARIUM|13|v3.1.0-protarium-online-r17|https://github.com/Protarium-Network/Inkay-GitHub-Release/releases/download/v3.1.0-protarium-online-r17/wiiu.zip|b755b1185c2c845c868919bc935d02906a9b19dcea310b18f2060de64c43a104|180546
 # FILE|ARCHIVE_PATH|SHA256|BYTES
-FILE|wiiu/environments/aroma/modules/Inkay-pretendo.wms|f742dcf288b604f818ddb0d63b46a6f44b5a3a4292d96fc05e3d5c2780d121e8|130756
-FILE|wiiu/environments/aroma/plugins/Inkay-pretendo.wps|4559dcd6dad1d083764ff47d7052e1012de092d77ab2f8aaa3e77eec4f8e02d2|51493
+FILE|wiiu/environments/aroma/modules/Inkay-pretendo.wms|deab8f8c98983020c32aa4c728bf0b0d02c98ba52b046ccd431ebe1a72265871|130469
+FILE|wiiu/environments/aroma/plugins/Inkay-pretendo.wps|09b7426c8701925435982e91d4b1686d6d2649c09136c303294897d9a1c92fa6|51523
