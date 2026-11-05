@@ -236,7 +236,7 @@ constexpr uint32_t JD16_CERT_ORIG[4] = {0x7c0802a6, 0x9421ff68, 0x93c10090, 0x93
 // done and every manager exists), exactly as if the player had entered the real input sequence.
 // m_isActivated flips true on the first activation (offset +8, confirmed by decompiling
 // check()), so this fires exactly once and is inert (returns false) every frame after.
-constexpr uint32_t JD16_CHECK = 0x02708644;
+constexpr uint32_t JD16_CHECK = 0x026FD684;
 constexpr uint32_t JD16_CHECK_ORIG[7] = {
     0x7c0802a6, 0x90010004, 0x7c671b78, 0x9421fff8, 0x81430004, 0x2c0a0000, 0x38c00000,
 };
