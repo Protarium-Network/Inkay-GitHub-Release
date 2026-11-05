@@ -66,6 +66,7 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/game_peertopeer.h"
 #include "patches/bo2_auth.h"
 #include "patches/ghost_auth.h"
+#include "patches/nfs_online.h"
 #include "patches/justdance_cert.h"
 #include "patches/lost_reavers_url.h"
 #include "sysconfig.h"
@@ -225,6 +226,7 @@ WUMS_ALL_APPLICATION_STARTS_DONE() {
     setup_olv_libs();
     patch_bo2_auth();
     patch_ghosts_auth();
+    patch_nfs_online();
     patch_justdance_cert();
     peertopeer_patch();
     matchmaking_notify_titleswitch();
