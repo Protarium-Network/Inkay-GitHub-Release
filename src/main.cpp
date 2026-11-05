@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r17"
+#define INKAY_VERSION "v3.1.0-protarium-online-r18-jd-ghost"
 
 /**
     Mandatory plugin information.
@@ -65,6 +65,7 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/olv_applet.h"
 #include "patches/game_peertopeer.h"
 #include "patches/bo2_auth.h"
+#include "patches/ghost_auth.h"
 #include "patches/justdance_cert.h"
 #include "patches/lost_reavers_url.h"
 #include "sysconfig.h"
@@ -223,6 +224,7 @@ WUMS_ALL_APPLICATION_STARTS_DONE() {
     // we need to do the patches here because otherwise the Config::connect_to_network flag might be set yet
     setup_olv_libs();
     patch_bo2_auth();
+    patch_ghosts_auth();
     patch_justdance_cert();
     peertopeer_patch();
     matchmaking_notify_titleswitch();

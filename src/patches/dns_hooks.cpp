@@ -22,6 +22,7 @@
 #include "utils/logger.h"
 #include "inkay_config.h"
 #include "bo2_auth.h"
+#include "ghost_auth.h"
 #include "justdance_cert.h"
 #include "Notification.h"
 #include <array>
@@ -97,6 +98,7 @@ static const char * replace_dns_name(const char *dns_name) {
         // BO2's multiplayer RPL is loaded by the time it resolves Demonware, so
         // applying the auth-compatibility patch here avoids hooking the loader.
         patch_bo2_auth();
+        patch_ghosts_auth();
     }
 
     for (auto [original, replacement] : dns_replacements) {
