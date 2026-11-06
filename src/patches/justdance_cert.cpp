@@ -58,7 +58,7 @@ constexpr uint32_t NEW_1  = 0x4e800020; // blr
 // JD2019 only: force-unlock every customizable item (avatars, skins, portrait borders, ...).
 // Uplay-reward unlocks are compiled out of the Wii U build (JD_UplayProgressHandler::checkUplayReward
 // is #if ORBIS||DURANGO), so hook JD_CustomizableItemDatabaseEntry_Base::setCurrentStatus
-// (`stw r4,0x10(r3); blr`, 4 callers: save load, reset-to-defaults, lock/unlock, unlock-fallback)
+// (stw r4,0x10(r3); blr, 4 callers: save load, reset-to-defaults, lock/unlock, unlock-fallback)
 // so Locked(1) is stored as Unlocked(3). Hidden(2) stays hidden. The stub lives in the dead body of
 // ssl_verify_cert_chain (never runs past its first two words once the cert patch is in).
 // Takes effect when the save is loaded, i.e. from the 2nd boot of a brand-new profile.
@@ -118,7 +118,7 @@ constexpr Jd15Patch JD15_PATCHES[] = {
 // if a future test needs the same diagnostic again.
 
 // RendezVousSDK's generic RMC response dispatcher (used by every protocol, not just
-// SimpleAuthentication) ends in a hard `twu r31,r31` trap when a response doesn't match any
+// SimpleAuthentication) ends in a hard twu r31,r31 trap when a response doesn't match any
 // of the method names that particular call site expects - a "this should never happen on the
 // real Ubisoft server" assertion. Console-confirmed 2026-09-26 (crash report: PC in this trap,
 // reached from SimpleAuthenticationProtocol::Register_V1's response check, right after our
@@ -236,7 +236,8 @@ constexpr uint32_t JD16_CERT_ORIG[4] = {0x7c0802a6, 0x9421ff68, 0x93c10090, 0x93
 // done and every manager exists), exactly as if the player had entered the real input sequence.
 // m_isActivated flips true on the first activation (offset +8, confirmed by decompiling
 // check()), so this fires exactly once and is inert (returns false) every frame after.
-constexpr uint32_t JD16_CHECK = 0x026FD684;
+// NOTE: JD16_CHECK (address of JD_CheatCode::check) depends on the region, so it is chosen at
+// runtime inside patch_justdance2016(): USA (101B9000) -> 0x02708644, EUR (101B9800) -> 0x026FD684.
 constexpr uint32_t JD16_CHECK_ORIG[7] = {
     0x7c0802a6, 0x90010004, 0x7c671b78, 0x9421fff8, 0x81430004, 0x2c0a0000, 0x38c00000,
 };
@@ -251,10 +252,16 @@ constexpr uint32_t JD16_CHECK_NEW[7] = {
 };
 
 void patch_justdance2016() {
-    const uint64_t tid = OSGetTitleID();
+    const uint64_t title_id = OSGetTitleID();
+    DEBUG_FUNCTION_LINE("JD2016 title_id=%08x%08x", (uint32_t)(title_id >> 32), (uint32_t)title_id); // test
+
     bool isJd16 = false;
-    for (auto t : JD16_TITLES) isJd16 |= (tid == t);
+    for (auto t : JD16_TITLES) isJd16 |= (title_id == t);
     if (!isJd16) return;
+
+    // USA (101B9000) -> 0x02708644, EUR (101B9800) -> 0x026FD684
+    const uint32_t JD16_CHECK = (title_id == 0x00050000'101B9000ull) ? 0x02708644 : 0x026FD684;
+
     auto rpx = search_for_rpl(JD_RPX);
     if (!rpx) return;
 
@@ -292,7 +299,8 @@ void patch_justdance_cert() {
 
     // Never touch a system title (Wii U Menu, Mii Maker, H&S, ...) - a stale
     // engine RPL entry lingering there after a JD crash was the boot-loop.
-    if ((OSGetTitleID() & TITLE_TYPE_MASK) != TITLE_TYPE_GAME) return;
+    const uint64_t title_id = OSGetTitleID();
+    if ((title_id & TITLE_TYPE_MASK) != TITLE_TYPE_GAME) return;
 
     patch_justdance2015();
     patch_justdance2016();
