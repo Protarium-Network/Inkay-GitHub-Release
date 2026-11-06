@@ -23,6 +23,11 @@
 #include "config.h"
 #include "module.h"
 
+void LostReavers_Init();
+void LostReavers_Deinit();
+void LostReavers_OnStart();
+void LostReavers_OnEnd();
+
 #define INKAY_VERSION "v3.1.0-protarium-online-r17"
 
 /**
@@ -41,6 +46,7 @@ INITIALIZE_PLUGIN() {
     WHBLogCafeInit();
 
     Config::Init();
+    LostReavers_Init();
 
     if (NotificationModule_InitLibrary() != NOTIFICATION_MODULE_RESULT_SUCCESS) {
         DEBUG_FUNCTION_LINE("NotificationModule_InitLibrary failed");
@@ -52,6 +58,7 @@ INITIALIZE_PLUGIN() {
 
 DEINITIALIZE_PLUGIN() {
     Inkay_Finalize();
+    LostReavers_Deinit();
     NotificationModule_DeInitLibrary();
 
     WHBLogCafeDeinit();
@@ -60,8 +67,10 @@ DEINITIALIZE_PLUGIN() {
 ON_APPLICATION_START() {
     // Tell the module the plugin is running!
     Inkay_SetPluginRunning();
+    LostReavers_OnStart();
 }
 
 ON_APPLICATION_ENDS() {
+    LostReavers_OnEnd();
 
 }

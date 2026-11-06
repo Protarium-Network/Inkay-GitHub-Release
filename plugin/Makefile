@@ -21,9 +21,9 @@ WUMS_ROOT := $(DEVKITPRO)/wums
 #-------------------------------------------------------------------------------
 TARGET		:=	Inkay-pretendo
 BUILD		:=	build
-SOURCES		:=	src src/utils ../common
+SOURCES		:=	src src/utils ../common ../lrnet
 DATA		:=	data
-INCLUDES	:=	src ../src/lang ../common
+INCLUDES	:=	src ../src/lang ../common ../lrnet
 #DEBUG		:=	1
 
 #-------------------------------------------------------------------------------
@@ -46,7 +46,7 @@ LDFLAGS	=	-g $(ARCH) $(OPT) $(RPXSPECS) -Wl,-Map,$(notdir $*.map) -Wl,-gc-sectio
 
 LDFLAGS	+=	$(WUPSSPECS)
 
-LIBS	:= -lwups -lwut -lnotifications
+LIBS	:= -lwups -lwut -lnotifications -lfunctionpatcher -lkernel
 
 #-------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level
