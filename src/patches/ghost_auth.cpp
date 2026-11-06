@@ -1,4 +1,4 @@
-#include "ghosts_auth.h"
+#include "ghost_auth.h"
 
 #include <coreinit/memory.h>
 #include <coreinit/memorymap.h>

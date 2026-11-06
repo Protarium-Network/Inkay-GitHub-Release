@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r18-jd-ghost"
+#define INKAY_VERSION "v3.1.0-protarium-online-r25-nfs"
 
 /**
     Mandatory plugin information.
