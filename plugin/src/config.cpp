@@ -150,7 +150,7 @@ static WUPSConfigAPICallbackStatus ConfigMenuOpenedCallback(WUPSConfigCategoryHa
     strings = get_config_strings(Config::current_language);
 
     // Network submenu
-    //    Connect to Pretendo Network        Yes/No
+    //    Connect to Protarium Network        Yes/No
     //    Using UDP port 5000 for multiplayer
 
     WUPSConfigCategoryHandle network_cat;
@@ -211,31 +211,36 @@ static WUPSConfigAPICallbackStatus ConfigMenuOpenedCallback(WUPSConfigCategoryHa
     err = WUPSConfigAPI_Category_AddItem(other_cat, unregisterTasksItem);
     if (err != WUPSCONFIG_API_RESULT_SUCCESS) return report_error(err, __LINE__);
 
-    // TODO localise these!
-    constexpr std::array<ConfigItemMultipleValuesPair, 14> languages = {
+    // Localised: each language names itself (see src/lang/*.lang's "language_name"), so the
+    // list reads correctly regardless of which language is currently displaying the menu.
+    // system_language is the exception - most *.lang files never filled it in, so it falls
+    // back to the English "System" rather than showing a blank entry.
+    const auto lang_name = [](inkay_language l) { return get_config_strings(l).language_name.data(); };
+    const char *system_entry = strings.system_language.empty() ? "System" : strings.system_language.data();
+    const std::array<ConfigItemMultipleValuesPair, 14> languages = {
         {
-            {0, "Japanese"},
-            {1, "English"},
-            {2, "French"},
-            {3, "German"},
-            {4, "Italian"},
-            {5, "Spanish"},
-            {6, "Simplified Chinese"},
-            {7, "Korean"},
-            {8, "Dutch"},
-            {9, "Portuguese"},
-            {10, "Russian"},
-            {11, "Traditional Chinese"},
-            {13, "System"},
-            {14, "English (UwU)"},
+            {0, lang_name(Japanese)},
+            {1, lang_name(English)},
+            {2, lang_name(French)},
+            {3, lang_name(German)},
+            {4, lang_name(Italian)},
+            {5, lang_name(Spanish)},
+            {6, lang_name(SimplifiedChinese)},
+            {7, lang_name(Korean)},
+            {8, lang_name(Dutch)},
+            {9, lang_name(Portuguese)},
+            {10, lang_name(Russian)},
+            {11, lang_name(TraditionalChinese)},
+            {13, system_entry},
+            {14, lang_name(EnUwU)},
         }
     };
 
-    constexpr auto find_lang = [languages](const uint32_t lang) -> int {
+    const auto find_lang = [&languages](const uint32_t lang) -> int {
         return std::ranges::find_if(languages, [lang](auto const l) { return l.value == lang; }) -
                std::begin(languages);
     };
-    constexpr int system_language = find_lang(13 /* System */);
+    const int system_language = find_lang(13 /* System */);
     const int current_language = find_lang(Config::language);
 
     WUPSConfigItemHandle language_item;

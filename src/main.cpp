@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r25-nfs"
+#define INKAY_VERSION "v3.1.0-protarium-online-r26-rewrite"
 
 /**
     Mandatory plugin information.
@@ -65,7 +65,7 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/olv_applet.h"
 #include "patches/game_peertopeer.h"
 #include "patches/bo2_auth.h"
-#include "patches/ghost_auth.h"
+#include "patches/ghosts_auth.h"
 #include "patches/nfs_online.h"
 #include "patches/justdance_cert.h"
 #include "patches/lost_reavers_url.h"

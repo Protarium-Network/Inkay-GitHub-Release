@@ -45,16 +45,15 @@
 #include "inkay_config.h"
 #include "utils/logger.h"
 
-namespace {
-constexpr int CURLOPT_URL = 10002;
+#define CURLOPT_URL 10002
 
-constexpr char ORIGINAL_HOST[]     = "mars.project-treasure.bng.jp";
-constexpr char REPLACEMENT_BASE[]  = LOST_REAVERS_BASE_URL;
+const char ORIGINAL_HOST[]     = "mars.project-treasure.bng.jp";
+const char REPLACEMENT_BASE[]  = LOST_REAVERS_BASE_URL;
 
 // libcurl copies CURLOPT_URL's string internally as soon as the setopt call
 // returns, so one static buffer reused across calls is safe - it only has
 // to stay valid for the duration of this single call.
-char sRewrittenUrl[512];
+static char sRewrittenUrl[512];
 
 const char *rewrite_lost_reavers_url(const char *url) {
     if (!url) {
@@ -75,7 +74,6 @@ const char *rewrite_lost_reavers_url(const char *url) {
     std::snprintf(sRewrittenUrl, sizeof(sRewrittenUrl), "%s%s", REPLACEMENT_BASE, afterHost);
     return sRewrittenUrl;
 }
-} // namespace
 
 std::vector<PatchedFunctionHandle> lost_reavers_url_patches;
 
@@ -91,9 +89,7 @@ DECL_FUNCTION(int, lr_curl_easy_setopt, void *handle, int option, uint32_t value
 }
 
 void patch_lost_reavers_url() {
-    if (!Config::connect_to_network) {
-        return;
-    }
+    if (!Config::connect_to_network) return;
 
     lost_reavers_url_patches.reserve(1);
 

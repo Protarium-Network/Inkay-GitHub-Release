@@ -31,7 +31,6 @@ static const URL_Patch url_patches[] = {
         // is not covered by our DNS record. Extra variadic arguments passed to
         // snprintf are harmless when the format string has no conversions.
         {0xE31930D4, "https://" WSC_ACCOUNT_HOST "/v1/api/"}
-
 };
 
 #endif

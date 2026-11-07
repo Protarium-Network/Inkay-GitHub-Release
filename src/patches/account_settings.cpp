@@ -66,7 +66,7 @@ static bool isAccountSettingsTitle() {
         OSGetTitleID() == ACCOUNT_SETTINGS_TID_J ||
         OSGetTitleID() == ACCOUNT_SETTINGS_TID_U ||
         OSGetTitleID() == ACCOUNT_SETTINGS_TID_E
-        ));
+    ));
 }
 
 static std::optional<FSFileHandle> rootca_pem_handle{};

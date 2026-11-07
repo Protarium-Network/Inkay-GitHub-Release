@@ -12,19 +12,17 @@
 
 using namespace std::string_view_literals;
 
-namespace {
-constexpr uint64_t BO2_USA_TITLE_ID  = 0x00050000'1010cf00; // USA / NTSC-U
-constexpr uint64_t BO2_EUR_TITLE_ID  = 0x00050000'10113400; // EUR - English / UK
-constexpr uint64_t BO2_ESIT_TITLE_ID = 0x00050000'10113500; // EUR - Spanish + Italian
-constexpr uint64_t BO2_DE_TITLE_ID   = 0x00050000'10113700; // EUR - German
-constexpr uint64_t BO2_JPN_TITLE_ID  = 0x00050000'1011b400; // JPN
+#define BO2_USA_TITLE_ID  0x000500001010cf00 // USA / NTSC-U
+#define BO2_EUR_TITLE_ID  0x0005000010113400 // EUR - English / UK
+#define BO2_ESIT_TITLE_ID 0x0005000010113500 // EUR - Spanish + Italian
+#define BO2_DE_TITLE_ID   0x0005000010113700 // EUR - German
+#define BO2_JPN_TITLE_ID  0x000500001011b400 // JPN
+
 // t6mp_cafef_rpl.rpl from BO2 update v128, SHA-256:
 // 3B30AB9F0D487C9508DA81E1547A64FD95DC6E58A97724ECF57EBBEEE04FF63F
-constexpr uint32_t RSA_VERIFY_BRANCH = 0x02a2e69c;
-constexpr uint32_t ORIGINAL_BNE = 0x40820070; // bne 0x02a2e70c
-constexpr uint32_t BYPASS_BRANCH = 0x48000070; // b   0x02a2e70c
-
-}
+static const uint32_t RSA_VERIFY_BRANCH = 0x02a2e69c;
+static const uint32_t ORIGINAL_BNE      = 0x40820070; // bne 0x02a2e70c
+static const uint32_t BYPASS_BRANCH     = 0x48000070; // b   0x02a2e70c
 
 void patch_bo2_auth() {
     if (!Config::connect_to_network) return;

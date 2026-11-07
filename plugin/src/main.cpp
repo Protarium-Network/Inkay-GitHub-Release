@@ -28,7 +28,7 @@ void LostReavers_Deinit();
 void LostReavers_OnStart();
 void LostReavers_OnEnd();
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r25-nfs"
+#define INKAY_VERSION "v3.1.0-protarium-online-r26-rewrite"
 
 /**
     Mandatory plugin information.

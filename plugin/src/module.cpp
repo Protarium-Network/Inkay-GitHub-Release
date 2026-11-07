@@ -37,9 +37,7 @@ static const char *get_module_init_not_found_message() {
 }
 
 void Inkay_Initialize(bool apply_patches, bool show_startup_toast) {
-    if (module) {
-        return;
-    }
+    if (module) return;
 
     if (OSDynLoad_Acquire("inkay", &module) != OS_DYNLOAD_OK) {
         DEBUG_FUNCTION_LINE("Failed to acquire module");
@@ -67,9 +65,7 @@ void Inkay_Finalize() {
 }
 
 InkayStatus Inkay_GetStatus() {
-    if (!module) {
-        return InkayStatus::Error;
-    }
+    if (!module) return InkayStatus::Error;
 
     if (!moduleGetStatus && OSDynLoad_FindExport(module, OS_DYNLOAD_EXPORT_FUNC, "Inkay_GetStatus", reinterpret_cast<void * *>(&moduleGetStatus)) != OS_DYNLOAD_OK) {
         DEBUG_FUNCTION_LINE("Failed to find function %s", "Inkay_GetStatus");
@@ -80,9 +76,7 @@ InkayStatus Inkay_GetStatus() {
 }
 
 void Inkay_SetPluginRunning() {
-    if (!module) {
-        return;
-    }
+    if (!module) return;
 
     if (!moduleSetPluginRunning && OSDynLoad_FindExport(module, OS_DYNLOAD_EXPORT_FUNC, "Inkay_SetPluginRunning", reinterpret_cast<void * *>(&moduleSetPluginRunning)) != OS_DYNLOAD_OK) {
         DEBUG_FUNCTION_LINE("Failed to find function %s", "Inkay_SetPluginRunning");

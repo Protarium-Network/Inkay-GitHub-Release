@@ -1,4 +1,4 @@
-#include "ghost_auth.h"
+#include "ghosts_auth.h"
 
 #include <coreinit/memory.h>
 #include <coreinit/memorymap.h>
@@ -17,16 +17,15 @@
 
 using namespace std::string_view_literals;
 
-namespace {
 // Only the USA build has been reverse-engineered so far (see cod-ghosts-wiiu/RE_REFERENCE.md):
 // every address below comes from the USA iw6mp_cafef_rpl.rpl. The EUR and JPN title IDs are
 // accepted too, but a regional build may be a different compile, so nothing is written unless
 // EVERY patch site holds the instruction we expect (see patch_ghosts_auth); otherwise the patch
 // is skipped as a whole and a single notification says so.
-constexpr uint64_t GHOSTS_USA_TITLE_ID = 0x00050000'10146800; // WUP-P-ACPE
-constexpr uint64_t GHOSTS_EUR_TITLE_ID = 0x00050000'10156100; // WUP-P-ACPP (English, French, German)
-constexpr uint64_t GHOSTS_EUR_ESIT_TITLE_ID = 0x00050000'10157600; // WUP-P-ACPI (Spanish, Italian)
-constexpr uint64_t GHOSTS_JPN_TITLE_ID = 0x00050000'10157900; // WUP-P-ACPJ
+#define GHOSTS_USA_TITLE_ID      0x0005000010146800 // WUP-P-ACPE
+#define GHOSTS_EUR_TITLE_ID      0x0005000010156100 // WUP-P-ACPP (English, French, German)
+#define GHOSTS_EUR_ESIT_TITLE_ID 0x0005000010157600 // WUP-P-ACPI (Spanish, Italian)
+#define GHOSTS_JPN_TITLE_ID      0x0005000010157900 // WUP-P-ACPJ
 
 // iw6mp_cafef_rpl.rpl, USA. All addresses found via the RPL's own (non-stripped) ELF symbol
 // table + capstone disassembly, not blind RE -- see cod-ghosts-wiiu/RE_REFERENCE.md for the walk.
@@ -35,13 +34,13 @@ constexpr uint64_t GHOSTS_JPN_TITLE_ID = 0x00050000'10157900; // WUP-P-ACPJ
 // console-signed ticket (no private key), same root cause as BO2's RSA_VERIFY_BRANCH patch.
 // Two call sites both check `cmpwi r3,0 ; bne <fail>` right after the call and both need the
 // `bne` turned into an unconditional `b` to the same target.
-constexpr uint32_t RSA_GATE_1 = 0x029138a0; // bdAuthService::handleWiiUReplies
-constexpr uint32_t RSA_GATE_1_BNE = 0x40820070; // bne 0x2913910
-constexpr uint32_t RSA_GATE_1_BYPASS = 0x48000070; // b   0x2913910
+static const uint32_t RSA_GATE_1        = 0x029138a0; // bdAuthService::handleWiiUReplies
+static const uint32_t RSA_GATE_1_BNE    = 0x40820070; // bne 0x2913910
+static const uint32_t RSA_GATE_1_BYPASS = 0x48000070; // b   0x2913910
 
-constexpr uint32_t RSA_GATE_2 = 0x029370d8; // bdAuthService::handleReply (generic path)
-constexpr uint32_t RSA_GATE_2_BNE = 0x408200f4; // bne 0x29371cc
-constexpr uint32_t RSA_GATE_2_BYPASS = 0x480000f4; // b   0x29371cc
+static const uint32_t RSA_GATE_2        = 0x029370d8; // bdAuthService::handleReply (generic path)
+static const uint32_t RSA_GATE_2_BNE    = 0x408200f4; // bne 0x29371cc
+static const uint32_t RSA_GATE_2_BYPASS = 0x480000f4; // b   0x29371cc
 
 // 2) Ticket-magic check, right after the RSA gate in the same function
 // (bdAuthService::handleWiiUReplies). After deserializing the auth ticket
@@ -54,39 +53,39 @@ constexpr uint32_t RSA_GATE_2_BYPASS = 0x480000f4; // b   0x29371cc
 // never proceeds past it). dw-server has no way to know/produce this expected
 // magic value, so -- same root cause and same fix as BO2's ticket-magic NOP --
 // turn the `bne` into a NOP so the comparison result is ignored entirely.
-constexpr uint32_t TICKET_MAGIC_GATE = 0x02913958; // bdAuthService::handleWiiUReplies
-constexpr uint32_t TICKET_MAGIC_BNE = 0x40820068; // bne 0x29139c0
-constexpr uint32_t TICKET_MAGIC_NOP = 0x60000000; // nop
+static const uint32_t TICKET_MAGIC_GATE = 0x02913958; // bdAuthService::handleWiiUReplies
+static const uint32_t TICKET_MAGIC_BNE  = 0x40820068; // bne 0x29139c0
+static const uint32_t TICKET_MAGIC_NOP  = 0x60000000; // nop
 
 // 3) bdCommonAddr::getNATType() -- a 2-instruction getter (`lwz r3,0x9c(r3) ; blr`) read by
 // bdNATTravClient::connectionAllowed(), whose logic is byte-for-byte identical to BO2's
 // (natA==Open || natB==Open || (natA==Moderate && natB==Moderate)). Same fix as BO2's nat-open
 // stub: force it to always report Open (1), which unblocks connectionAllowed() for free.
-constexpr uint32_t NAT_TYPE_FUNC = 0x028dc18c;
-constexpr uint32_t NAT_TYPE_ORIGINAL = 0x8063009c; // lwz r3, 0x9c(r3)
-constexpr uint32_t NAT_TYPE_RETURN_OPEN = 0x38600001; // li r3, 1
+static const uint32_t NAT_TYPE_FUNC         = 0x028dc18c;
+static const uint32_t NAT_TYPE_ORIGINAL     = 0x8063009c; // lwz r3, 0x9c(r3)
+static const uint32_t NAT_TYPE_RETURN_OPEN  = 0x38600001; // li r3, 1
 
 // 4) Live_Base_IsUserNetworkConnectionAllowed() -- Ghosts' equivalent of BO2's
 // Live_HasMultiplayerPrivileges: reads a per-client byte (parental-control flag) that nothing
 // on a real Nintendo Network account ever sets. Stub the whole function to `li r3,1 ; blr`.
-constexpr uint32_t MP_PRIVILEGES_FUNC = 0x02703870;
-constexpr uint32_t MP_PRIVILEGES_ORIGINAL_0 = 0x7c0802a6; // mflr r0
-constexpr uint32_t MP_PRIVILEGES_ORIGINAL_1 = 0x9421ffe8; // stwu r1, -0x18(r1)
-constexpr uint32_t MP_PRIVILEGES_RETURN_TRUE_0 = 0x38600001; // li r3, 1
-constexpr uint32_t MP_PRIVILEGES_RETURN_TRUE_1 = 0x4e800020; // blr
+static const uint32_t MP_PRIVILEGES_FUNC       = 0x02703870;
+static const uint32_t MP_PRIVILEGES_ORIG_0     = 0x7c0802a6; // mflr r0
+static const uint32_t MP_PRIVILEGES_ORIG_1     = 0x9421ffe8; // stwu r1, -0x18(r1)
+static const uint32_t MP_PRIVILEGES_RET_TRUE_0 = 0x38600001; // li r3, 1
+static const uint32_t MP_PRIVILEGES_RET_TRUE_1 = 0x4e800020; // blr
 
 // 5) News + image-of-the-day gates. Live_SyncOnlineDataFlags (the "retrieving online profile" popup)
 // stays blocked on LiveStorage_DoWeHaveNews (0x8000) and LiveStorage_DoWeHaveIOTD (0x4000); nothing
 // ever fetches either on our server (diagnostic flags read 0xE000), and both are cosmetic. Stub both
 // to `li r3,1 ; blr` (first two instructions, original bytes read from the USA RPL).
-constexpr uint32_t HAVE_NEWS_FUNC = 0x02565a98;
-constexpr uint32_t HAVE_NEWS_ORIGINAL_0 = 0x3d8011e4; // lis r12, 0x11e4
-constexpr uint32_t HAVE_NEWS_ORIGINAL_1 = 0x818c8304; // lwz r12, -0x7cfc(r12)
-constexpr uint32_t HAVE_IOTD_FUNC = 0x02562a70;
-constexpr uint32_t HAVE_IOTD_ORIGINAL_0 = 0x3d8011e4; // lis r12, 0x11e4
-constexpr uint32_t HAVE_IOTD_ORIGINAL_1 = 0x818c8254; // lwz r12, -0x7dac(r12)
-constexpr uint32_t RETURN_TRUE_0 = 0x38600001; // li r3, 1
-constexpr uint32_t RETURN_TRUE_1 = 0x4e800020; // blr
+static const uint32_t HAVE_NEWS_FUNC       = 0x02565a98;
+static const uint32_t HAVE_NEWS_ORIG_0     = 0x3d8011e4; // lis r12, 0x11e4
+static const uint32_t HAVE_NEWS_ORIG_1     = 0x818c8304; // lwz r12, -0x7cfc(r12)
+static const uint32_t HAVE_IOTD_FUNC       = 0x02562a70;
+static const uint32_t HAVE_IOTD_ORIG_0     = 0x3d8011e4; // lis r12, 0x11e4
+static const uint32_t HAVE_IOTD_ORIG_1     = 0x818c8254; // lwz r12, -0x7dac(r12)
+static const uint32_t RETURN_TRUE_0        = 0x38600001; // li r3, 1
+static const uint32_t RETURN_TRUE_1        = 0x4e800020; // blr
 
 // Tried (2026-09-17): stubbing LiveStorage_DoWeHavePlaylists() (0x0257486c, lbz->li r3,1) to
 // skip the playlists_tu4.aggr fetch loop entirely. Address/original bytes were re-verified byte
@@ -96,8 +95,6 @@ constexpr uint32_t RETURN_TRUE_1 = 0x4e800020; // blr
 // same LAN -- not investigated further). Reverted rather than ship a patch that visibly spams a
 // bogus notification without a confirmed working effect. If revisited, get real debug log output
 // first before re-attempting -- see cod-ghosts-wiiu/RE_REFERENCE.md.
-
-}
 
 #ifdef GHOSTS_DIAG
 // Diagnostic, polled from the game's own frame loop; every change is shown as a notification.
@@ -109,10 +106,10 @@ constexpr uint32_t RETURN_TRUE_1 = 0x4e800020; // blr
 //    skipped; "started=N done=0" means the hosts did not answer the probe.
 static OSDynLoad_NotifyData g_diag_rpl;
 static void *g_sync_flags_fn = nullptr;
-constexpr uint32_t SYNC_FLAGS_FUNC = 0x027ec040;
-constexpr uint32_t GET_PARTY_DATA_FUNC = 0x023254fc;  // Lobby_GetPartyData
-constexpr uint32_t QOS_IN_PROGRESS_FUNC = 0x027066f0; // Live_QoSInProgress
-constexpr uint32_t QOS_LISTENER = 0x11a252b8;         // dwQoSMultiProbeListener, first slot
+static const uint32_t SYNC_FLAGS_FUNC      = 0x027ec040;
+static const uint32_t GET_PARTY_DATA_FUNC  = 0x023254fc; // Lobby_GetPartyData
+static const uint32_t QOS_IN_PROGRESS_FUNC = 0x027066f0; // Live_QoSInProgress
+static const uint32_t QOS_LISTENER         = 0x11a252b8; // dwQoSMultiProbeListener, first slot
 
 static bool diag_readable(const void *p) { return OSIsAddressValid(reinterpret_cast<uint32_t>(p)); }
 
@@ -171,7 +168,6 @@ static void install_sync_flags_diag(OSDynLoad_NotifyData rpl) {
 }
 #endif // GHOSTS_DIAG
 
-namespace {
 struct Site {
     uint32_t addr;
     uint32_t original;
@@ -185,12 +181,12 @@ const Site SITES[] = {
     {RSA_GATE_2, RSA_GATE_2_BNE, RSA_GATE_2_BYPASS, false, "RSA gate 2"},
     {TICKET_MAGIC_GATE, TICKET_MAGIC_BNE, TICKET_MAGIC_NOP, false, "ticket-magic"},
     {NAT_TYPE_FUNC, NAT_TYPE_ORIGINAL, NAT_TYPE_RETURN_OPEN, false, "nat-open"},
-    {MP_PRIVILEGES_FUNC, MP_PRIVILEGES_ORIGINAL_0, MP_PRIVILEGES_RETURN_TRUE_0, false, "mp-privileges (0)"},
-    {MP_PRIVILEGES_FUNC + 4, MP_PRIVILEGES_ORIGINAL_1, MP_PRIVILEGES_RETURN_TRUE_1, false, "mp-privileges (1)"},
-    {HAVE_NEWS_FUNC, HAVE_NEWS_ORIGINAL_0, RETURN_TRUE_0, true, "have-news (0)"},
-    {HAVE_NEWS_FUNC + 4, HAVE_NEWS_ORIGINAL_1, RETURN_TRUE_1, true, "have-news (1)"},
-    {HAVE_IOTD_FUNC, HAVE_IOTD_ORIGINAL_0, RETURN_TRUE_0, true, "have-iotd (0)"},
-    {HAVE_IOTD_FUNC + 4, HAVE_IOTD_ORIGINAL_1, RETURN_TRUE_1, true, "have-iotd (1)"},
+    {MP_PRIVILEGES_FUNC, MP_PRIVILEGES_ORIG_0, MP_PRIVILEGES_RET_TRUE_0, false, "mp-privileges (0)"},
+    {MP_PRIVILEGES_FUNC + 4, MP_PRIVILEGES_ORIG_1, MP_PRIVILEGES_RET_TRUE_1, false, "mp-privileges (1)"},
+    {HAVE_NEWS_FUNC, HAVE_NEWS_ORIG_0, RETURN_TRUE_0, true, "have-news (0)"},
+    {HAVE_NEWS_FUNC + 4, HAVE_NEWS_ORIG_1, RETURN_TRUE_1, true, "have-news (1)"},
+    {HAVE_IOTD_FUNC, HAVE_IOTD_ORIG_0, RETURN_TRUE_0, true, "have-iotd (0)"},
+    {HAVE_IOTD_FUNC + 4, HAVE_IOTD_ORIG_1, RETURN_TRUE_1, true, "have-iotd (1)"},
 };
 
 bool site_ready(OSDynLoad_NotifyData rpl, const Site &site) {
@@ -204,10 +200,10 @@ bool site_ready(OSDynLoad_NotifyData rpl, const Site &site) {
 
 enum class PatchState { Pending, Applied, Unsupported };
 PatchState g_state = PatchState::Pending;
-}
 
 void patch_ghosts_auth() {
     if (!Config::connect_to_network) return;
+
     if (g_state != PatchState::Pending) return; // applied (or refused) once per game launch
 
     const uint64_t title_id = OSGetTitleID();
@@ -240,5 +236,5 @@ void patch_ghosts_auth() {
 #endif
 
     DEBUG_FUNCTION_LINE("Ghosts auth compatibility patches applied");
-    ShowNotification("CoD Ghosts: authentication compatibility patch applied");
+    ShowNotification("Ghosts: authentication compatibility patch applied");
 }

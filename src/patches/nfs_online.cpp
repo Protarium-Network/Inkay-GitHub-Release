@@ -29,27 +29,25 @@
 
 using namespace std::string_view_literals;
 
-namespace {
 // USA / EUR / JPN title IDs and the user's install are matched by the instruction check below; this list only keeps
 // the lookup quiet in other titles. (EUR = 0x10128400 is the one tested.)
-constexpr uint64_t NFS_TITLE_IDS[] = {0x00050000'10128400ull, 0x00050000'10128800ull, 0x00050000'10128900ull,
+const uint64_t NFS_TITLE_IDS[] = {0x00050000'10128400ull, 0x00050000'10128800ull, 0x00050000'10128900ull,
                                       0x00050000'1012BC00ull};
 
-constexpr uint32_t FN_IS_LOGGED_IN = 0x02c1eb3c; // Hawaii.rpx v32: IsLoggedInToServer
-constexpr uint32_t FN_PROLOGUE[2]  = {0x7c0802a6, 0x9421fff0};   // mflr r0 ; stwu r1, -16(r1)
-constexpr uint32_t SITE            = 0x02c1eb9c;                // clrlwi r3, r0, 24
-constexpr uint32_t SITE_ORIG       = 0x5403063e;
-constexpr uint32_t SITE_NEW        = 0x38600001;                // li r3, 1
-constexpr uint32_t SITE_BEFORE[2]  = {0x5540d97e, 0x68000001};  // rlwinm r0, r10, 27, 5, 31 ; xori r0, r0, 1
+const uint32_t FN_IS_LOGGED_IN = 0x02c1eb3c; // Hawaii.rpx v32: IsLoggedInToServer
+const uint32_t FN_PROLOGUE[2]  = {0x7c0802a6, 0x9421fff0};   // mflr r0 ; stwu r1, -16(r1)
+const uint32_t SITE            = 0x02c1eb9c;                // clrlwi r3, r0, 24
+const uint32_t SITE_ORIG       = 0x5403063e;
+const uint32_t SITE_NEW        = 0x38600001;                // li r3, 1
+const uint32_t SITE_BEFORE[2]  = {0x5540d97e, 0x68000001};  // rlwinm r0, r10, 27, 5, 31 ; xori r0, r0, 1
 
-constexpr uint32_t SECURE_SITE     = 0x030f1308;
-constexpr uint32_t SECURE_ORIG     = 0x38c00001;                // li r6, 1
-constexpr uint32_t SECURE_NEW      = 0x38c00000;                // li r6, 0
-constexpr uint32_t SECURE_BEFORE   = 0x38e10018;                // addi r7, r1, 24
-constexpr uint32_t SECURE_AFTER    = 0x7fc5f378;                // mr r5, r30
+const uint32_t SECURE_SITE     = 0x030f1308;
+const uint32_t SECURE_ORIG     = 0x38c00001;                // li r6, 1
+const uint32_t SECURE_NEW      = 0x38c00000;                // li r6, 0
+const uint32_t SECURE_BEFORE   = 0x38e10018;                // addi r7, r1, 24
+const uint32_t SECURE_AFTER    = 0x7fc5f378;                // mr r5, r30
 
 bool applied = false;
-} // namespace
 
 void patch_nfs_online() {
     if (applied) return; // once per game launch
@@ -59,17 +57,14 @@ void patch_nfs_online() {
     for (const uint64_t id : NFS_TITLE_IDS) known |= (title_id == id);
     if (!known) return;
     // Diagnostic toasts (NFS only): tell the user exactly why nothing was patched.
-    if (!Config::connect_to_network) {
-        ShowNotification("NFS MW U: Protarium network is OFF in the plugin menu, patch skipped");
-        return;
-    }
+    if (!Config::connect_to_network) return;
 
     // the loader lists the RPX by its internal name (Hawaii_CAFE_External_Unity.rpx), not the file name on disk
     auto rpx = search_for_rpl("Hawaii_CAFE_External_Unity.rpx"sv);
     if (!rpx) rpx = search_for_rpl("Hawaii.rpx"sv);
     if (!rpx) {
-        DEBUG_FUNCTION_LINE("NFS MW U patch skipped: Hawaii.rpx not loaded");
-        ShowNotification("NFS MW U: Hawaii.rpx not found, patch skipped");
+        DEBUG_FUNCTION_LINE("NFS MW U patch skipped: Hawaii.rpx not found or not loaded");
+        ShowNotification("Need for Speed Most Wanted U: Hawaii.rpx not found or not loaded, patch skipped");
         return;
     }
 
@@ -83,7 +78,7 @@ void patch_nfs_online() {
         (*secure != SECURE_ORIG && *secure != SECURE_NEW)) {
         DEBUG_FUNCTION_LINE("NFS MW U: title %016llx is not update v32 (words %08x %08x %08x %08x), patch skipped", title_id,
                             fn[0], fn[1], *site, *secure);
-        ShowNotification("NFS MW U: game code differs from update v32, patch skipped");
+        ShowNotification("Need for Speed Most Wanted U: game code differs from update v32, patch skipped");
         return;
     }
 
@@ -97,5 +92,5 @@ void patch_nfs_online() {
     }
     applied = true;
     DEBUG_FUNCTION_LINE("NFS MW U: logged-in check @%08x and plain-TCP flag @%08x patched", (uint32_t) site, (uint32_t) secure);
-    ShowNotification("NFS Most Wanted U: online login + plain TCP patch applied");
+    ShowNotification("Need for Speed Most Wanted U: online login + plain TCP patch applied");
 }

@@ -25,6 +25,7 @@
 #include <optional>
 #include <algorithm>
 #include <string_view>
+
 using namespace std::string_view_literals;
 
 static struct {
@@ -53,7 +54,7 @@ static struct {
 };
 
 static void generic_peertopeer_patch() {
-    uint64_t tid = OSGetTitleID();
+    uint64_t title_id = OSGetTitleID();
     uint16_t title_version = 0;
     if (const auto version_opt = get_current_title_version(); !version_opt) {
         DEBUG_FUNCTION_LINE("Failed to detect current title version");
@@ -64,7 +65,7 @@ static void generic_peertopeer_patch() {
     }
 
     for (const auto &patch: generic_patch_games) {
-        if (std::ranges::find(patch.tid, tid) == patch.tid.end()) continue;
+        if (std::ranges::find(patch.tid, title_id) == patch.tid.end()) continue;
 
         std::optional<OSDynLoad_NotifyData> game = search_for_rpl(patch.rpx);
         if (!game) {
@@ -176,19 +177,17 @@ static void sonic_transformed_peertopeer_patch() {
 }
 
 void peertopeer_patch() {
-    if (!Config::connect_to_network) {
-        return;
-    }
+    if (!Config::connect_to_network) return;
 
-    uint64_t tid = OSGetTitleID();
-    if (tid == 0x00050000'1010B300 || // Sonic Transformed USA
-        tid == 0x00050000'10111F00 || // Sonic Transformed EUR
-        tid == 0x00050000'1015B400) { // Sonic Transformed JPN
+    uint64_t title_id = OSGetTitleID();
+    if (title_id == 0x00050000'1010B300 || // Sonic Transformed USA
+        title_id == 0x00050000'10111F00 || // Sonic Transformed EUR
+        title_id == 0x00050000'1015B400) { // Sonic Transformed JPN
 
         sonic_transformed_peertopeer_patch();
-    } else if (tid == 0x00050000'101D7500 || // EUR
-        tid == 0x00050000'101D9D00 || // USA
-        tid == 0x00050000'101DBE00) { // JPN
+    } else if (title_id == 0x00050000'101D7500 || // Minecraft EUR
+        title_id == 0x00050000'101D9D00 || // Minecraft USA
+        title_id == 0x00050000'101DBE00) { // Minecraft JPN
 
         minecraft_peertopeer_patch();
     } else {

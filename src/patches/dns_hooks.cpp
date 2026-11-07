@@ -22,7 +22,7 @@
 #include "utils/logger.h"
 #include "inkay_config.h"
 #include "bo2_auth.h"
-#include "ghost_auth.h"
+#include "ghosts_auth.h"
 #include "justdance_cert.h"
 #include "Notification.h"
 #include <array>

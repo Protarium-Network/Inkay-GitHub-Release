@@ -132,6 +132,7 @@ DECL_FUNCTION(FSStatus, FSReadFile, FSClient *client, FSCmdBlock *block, uint8_t
         //this can't be done above (in the FSOpenFile hook) since it's not loaded yet.
         //the hardcoded offsets suck but they really are at Random Places In The Heap
         replaceBulk(0x11000000, 0x02000000, replacements);
+        DEBUG_FUNCTION_LINE_VERBOSE("Inkay: Color replacements applied to Miiverse applet!");
         return (FSStatus) count;
     }
 
