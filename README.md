@@ -73,5 +73,6 @@ Each of these should be `make install`-able. After that, you can compile Inkay w
 ## TODO
 See [Issues](https://github.com/Protarium-Network/Inkay-GitHub-Release/issues).
 
-## License
-This project is licensed under GPLv3.0. See ![LICENSE](https://github.com/Protarium-Network/Inkay-GitHub-Release/blob/main/LICENSE) for more information.
+## License & Copyright
+This project is licensed under GPLv3.0. 
+Copyright © 2026 Protarium Network.
