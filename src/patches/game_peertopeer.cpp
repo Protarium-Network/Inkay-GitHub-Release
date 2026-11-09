@@ -124,8 +124,8 @@ static void sonic_transformed_peertopeer_patch() {
     // RootTransport::GetNextPortNumber() while preparing NAT traversal. The
     // latter normally selects a random port in 0xc000..0xffff, which makes the
     // station URL disagree with the stable port forwarded by Inkay.
-    constexpr uint32_t get_well_known_port = 0x02de4598;
-    constexpr uint32_t get_next_port = 0x02de4b5c;
+    const uint32_t get_well_known_port = 0x02de4598;
+    const uint32_t get_next_port       = 0x02de4b5c;
 
     std::optional<OSDynLoad_NotifyData> sonic = search_for_rpl("SART.rpx"sv);
     if (!sonic) {
@@ -134,7 +134,7 @@ static void sonic_transformed_peertopeer_patch() {
     }
 
     auto *well_known = (uint32_t *) rpl_addr(*sonic, get_well_known_port);
-    auto *next = (uint32_t *) rpl_addr(*sonic, get_next_port);
+    auto *next       = (uint32_t *) rpl_addr(*sonic, get_next_port);
 
     constexpr std::array<uint32_t, 3> well_known_original = {
         0x3c601032, // lis r3, 0x1032

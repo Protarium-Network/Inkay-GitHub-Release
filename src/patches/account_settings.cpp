@@ -74,7 +74,7 @@ std::vector<PatchedFunctionHandle> account_patches;
 
 DECL_FUNCTION(int, FSOpenFile_accSettings, FSClient *client, FSCmdBlock *block, char *path, const char *mode, uint32_t *handle,
               int error) {
-    if(!isAccountSettingsTitle()) {
+    if (!isAccountSettingsTitle()) {
         return real_FSOpenFile_accSettings(client, block, path, mode, handle, error);
     }
 
@@ -95,7 +95,7 @@ DECL_FUNCTION(int, FSOpenFile_accSettings, FSClient *client, FSCmdBlock *block, 
 
 DECL_FUNCTION(FSStatus, FSReadFile_accSettings, FSClient *client, FSCmdBlock *block, uint8_t *buffer, uint32_t size, uint32_t count,
               FSFileHandle handle, uint32_t unk1, uint32_t flags) {
-    if(!isAccountSettingsTitle()) {
+    if (!isAccountSettingsTitle()) {
         return real_FSReadFile_accSettings(client, block, buffer, size, count, handle, unk1, flags);
     }
     if (size != 1) {
@@ -138,7 +138,7 @@ bool patchAccountSettings() {
 }
 
 bool hotpatchAccountSettings() {
-    if(!isAccountSettingsTitle()) {
+    if (!isAccountSettingsTitle()) {
         return false;
     }
 

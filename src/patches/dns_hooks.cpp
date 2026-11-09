@@ -90,9 +90,7 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
 };
 
 static const char * replace_dns_name(const char *dns_name) {
-    if (!Config::connect_to_network || !dns_name) {
-        return dns_name;
-    }
+    if (!Config::connect_to_network || !dns_name) return dns_name;
 
     if (strstr(dns_name, "demonware.net") != nullptr) {
         // BO2's multiplayer RPL is loaded by the time it resolves Demonware, so

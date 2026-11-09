@@ -56,13 +56,9 @@ const char REPLACEMENT_BASE[]  = LOST_REAVERS_BASE_URL;
 static char sRewrittenUrl[512];
 
 const char *rewrite_lost_reavers_url(const char *url) {
-    if (!url) {
-        return nullptr;
-    }
+    if (!url) return nullptr;
     const char *hostStart = std::strstr(url, ORIGINAL_HOST);
-    if (!hostStart) {
-        return nullptr;
-    }
+    if (!hostStart) return nullptr;
     const char *afterHost = hostStart + (sizeof(ORIGINAL_HOST) - 1);
     // Skip an explicit ":port" if the game ever includes one after the host.
     if (*afterHost == ':') {

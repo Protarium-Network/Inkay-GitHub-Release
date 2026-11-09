@@ -95,9 +95,7 @@ DECL_FUNCTION(void, mk8_MatchmakeSession_SetAttribute, void *_this, uint32_t att
 }
 
 void install_matchmaking_patches() {
-    if (!Config::connect_to_network) {
-        return;
-    }
+    if (!Config::connect_to_network) return;
 
     matchmaking_patches.reserve(4);
 
