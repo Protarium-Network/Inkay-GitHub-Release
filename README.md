@@ -18,13 +18,10 @@
 - Miiverse (in-game)
 - Miiverse applet
 - Demaecan
-- Super Mario Maker 100 Mario Challenges
-- Call of Duty Black Ops 2
 - Call of Duty Ghosts
 - Just Dance 2015-2019
 - Lost Reavers
 - Need for Speed Most Wanted U
-- Wii Karaoke U 
 Inkay also includes game-specific patches to add extra features:
 - Modpack-specific matchmaking for global, regional rooms (by simulating extra DLC) - **Mario Kart 8**
 - P2P port override for better connection stability (if you port forward) - **Minecraft: Wii U Edition**, **Mario Kart 8**, **Splatoon**
