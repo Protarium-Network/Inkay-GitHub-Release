@@ -18,9 +18,6 @@
 - Miiverse (in-game)
 - Miiverse applet
 - Demaecan
-- Super Mario Maker 100 Mario Challenges
-- Call of Duty Black Ops 2
-- Call of Duty Ghosts
 - Just Dance 2015-2019
 - Lost Reavers
 - Need for Speed Most Wanted U
