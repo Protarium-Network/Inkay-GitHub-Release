@@ -18,7 +18,6 @@
 - Miiverse (in-game)
 - Miiverse applet
 - Demaecan
-- Call of Duty Ghosts
 - Just Dance 2015-2019
 - Lost Reavers
 - Need for Speed Most Wanted U
