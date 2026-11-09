@@ -19,6 +19,8 @@
 - Miiverse applet
 - Demaecan
 - Super Mario Maker 100 Mario Challenges
+- Call of Duty Black Ops 2
+- Call of Duty Ghosts
 - Just Dance 2015-2019
 - Lost Reavers
 - Need for Speed Most Wanted U
@@ -71,5 +73,6 @@ After that, run `make` if you are on Windows, or `.\build.sh` if you are on Linu
 ## TODO
 See [Issues](https://github.com/Protarium-Network/Inkay-GitHub-Release/issues).
 
-## License
-This project is licensed under GPLv3.0. See ![LICENSE](https://github.com/Protarium-Network/Inkay-GitHub-Release/blob/main/LICENSE) for more information.
+## License & Copyright
+This project is licensed under GPLv3.0. 
+Copyright © 2026 Protarium Network.
