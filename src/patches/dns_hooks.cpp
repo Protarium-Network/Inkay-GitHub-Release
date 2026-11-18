@@ -51,6 +51,9 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         // hostname/HTTPS/443 (see lost_reavers_url.cpp).
         { "mars.project-treasure.bng.jp", LOST_REAVERS_HOST },
 
+        // Disney Infinity Global API (1.0 + 2.0 + 3.0)
+        { "api.disney.com", DISNEY_API_HOST },
+
         // Just Dance 2016-2018 World Dance Floor (UbiServices + JMCS over HTTPS).
         { "jmcs-prod.just-dance.com", JD_WDF_HOST },
         { "api-ubiservices.ubi.com", JD_WDF_HOST },

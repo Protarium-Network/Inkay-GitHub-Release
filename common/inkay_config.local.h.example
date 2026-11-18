@@ -50,3 +50,6 @@
 
 // Miiverse browser allowlist domain
 // #define OLV_BASEURL "custom-network.example.com"
+
+// Disney Infinity Host API
+// #define DISNEY_API_HOST "api.custom-network.example.com"
