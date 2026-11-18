@@ -84,6 +84,11 @@
 #define OLV_BASEURL NETWORK_BASEURL
 #endif
 
+// Disney Infinity Host API
+#ifndef DISNEY_API_HOST
+#define DISNEY_API_HOST "api." NETWORK_BASEURL
+#endif
+
 // Just Dance 2015-2019 World Dance Floor: UbiServices + JMCS are DNS-redirected to
 // this host (original Host header is preserved) - see dns_hooks.cpp.
 #ifndef JD_WDF_HOST
