@@ -62,6 +62,9 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
 
         // Need for Speed Most Wanted U: redirector (42127) answers with the game
         // server address; gosca (44125) is the CA-cert HTTP fetch.
+        // Pure Chess: Voofoo Async Game Server (SOAP over HTTPS, Host/SNI preserved).
+        { "ags.voofoostudios.com", PURECHESS_AGS_HOST },
+
         { "gosredirector.ea.com", NFS_BLAZE_HOST },
         { "gosca.ea.com", NFS_BLAZE_HOST },
 

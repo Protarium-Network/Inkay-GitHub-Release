@@ -39,7 +39,7 @@ static const char *get_module_init_not_found_message() {
 void Inkay_Initialize(bool apply_patches, bool show_startup_toast) {
     if (module) return;
 
-    if (OSDynLoad_Acquire("inkay", &module) != OS_DYNLOAD_OK) {
+    if (OSDynLoad_Acquire("inkay_protarium", &module) != OS_DYNLOAD_OK) {
         DEBUG_FUNCTION_LINE("Failed to acquire module");
         ShowNotification(get_module_not_found_message());
         return;

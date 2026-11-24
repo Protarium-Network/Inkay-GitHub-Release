@@ -28,7 +28,7 @@ void LostReavers_Deinit();
 void LostReavers_OnStart();
 void LostReavers_OnEnd();
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r26-rewrite"
+#define INKAY_VERSION "v3.1.0-protarium-online-r27-fifa"
 
 /**
     Mandatory plugin information.
@@ -40,7 +40,7 @@ WUPS_PLUGIN_VERSION(INKAY_VERSION);
 WUPS_PLUGIN_AUTHOR("Protarium Network, Pretendo contributors");
 WUPS_PLUGIN_LICENSE("GPLv3");
 
-WUPS_USE_STORAGE("inkay");
+WUPS_USE_STORAGE("inkay_protarium");
 
 INITIALIZE_PLUGIN() {
     WHBLogCafeInit();

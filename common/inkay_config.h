@@ -110,4 +110,15 @@
 #define MH3U_GOSHAWK_HOST "mh3u." NETWORK_BASEURL
 #endif
 
+// Rayman Legends (Wii U): DNS redirect target for onlineconfigservice.ubi.com (HTTP :80, Host header preserved).
+// Same host as the Just Dance backend: the reverse proxy there answers the config request and points the game at the Rayman server.
+#ifndef RAYMAN_CONFIG_HOST
+#define RAYMAN_CONFIG_HOST "jd." NETWORK_BASEURL
+#endif
+
+// Pure Chess (Wii U): Voofoo Async Game Server, DNS-only redirect.
+#ifndef PURECHESS_AGS_HOST
+#define PURECHESS_AGS_HOST "jd." NETWORK_BASEURL
+#endif
+
 #endif //INKAY_INKAY_CONFIG_H
