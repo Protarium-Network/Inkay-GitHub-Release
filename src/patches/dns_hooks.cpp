@@ -56,6 +56,10 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         { "api-ubiservices.ubi.com", JD_WDF_HOST },
         { "public-ubiservices.ubi.com", JD_WDF_HOST },
 
+        // Rayman Legends (Wii U): Ubisoft OnlineConfigService (plain HTTP :80, original Host header kept).
+        // Its answer carries the address of the Quazal/PRUDP server, so this one redirect is enough.
+        { "onlineconfigservice.ubi.com", RAYMAN_CONFIG_HOST },
+
         // Need for Speed Most Wanted U: redirector (42127) answers with the game
         // server address; gosca (44125) is the CA-cert HTTP fetch.
         { "gosredirector.ea.com", NFS_BLAZE_HOST },

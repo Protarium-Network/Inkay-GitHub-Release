@@ -50,3 +50,6 @@
 
 // Miiverse browser allowlist domain
 // #define OLV_BASEURL "custom-network.example.com"
+
+// Rayman Legends (Ubisoft onlineconfigservice) - A Record
+// #define RAYMAN_CONFIG_HOST "rayman.custom-network.example.com"
