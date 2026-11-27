@@ -17,6 +17,8 @@
 
 using namespace std::string_view_literals;
 
+const uint64_t FIFA_TITLE_IDS[] = {0x00050000'1010ee00ull, 0x00050000'1010d900ull};
+
 // FIFA 13 EUR base = 0x1010ee00 (the only one seen); other regions are caught by the instruction check below.
 const uint32_t SECURE_SITE   = 0x030e1e24;
 const uint32_t SECURE_ORIG   = 0x38c00001; // li r6, 1
@@ -26,16 +28,14 @@ const uint32_t SECURE_AFTER  = 0x38e10018; // addi r7, r1, 24
 const uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the site)
 
 void patch_fifa_online() {
+    const uint64_t title_id = OSGetTitleID();
     // no 'already applied' guard: the plugin outlives game launches, every launch has fresh (unpatched) memory
-    if (OSGetTitleID() != 0x00050000'1010ee00ull) return; // ponytail: EUR only, add USA/JPN ids once seen on a console
-    if (!Config::connect_to_network) {
-        ShowNotification("FIFA 13: Protarium network is OFF in the plugin menu, patch skipped");
-        return;
-    }
+    if (title_id != FIFA_TITLE_IDS) return; // ponytail: EUR only, add USA/JPN ids once seen on a console
+    if (!Config::connect_to_network) return;
     const auto rpx = search_for_rpl("fifazf.rpx"sv);
     if (!rpx) {
-        DEBUG_FUNCTION_LINE("FIFA 13 patch skipped: fifazf.rpx not loaded");
-        ShowNotification("FIFA 13: fifazf.rpx not found, patch skipped");
+        DEBUG_FUNCTION_LINE("FIFA 13 patch skipped: fifazf.rpx not found or not loaded");
+        ShowNotification("FIFA 13: fifazf.rpx not found or not loaded, patch skipped");
         return;
     }
     auto *site = static_cast<uint32_t *>(rpl_addr(*rpx, SECURE_SITE));
