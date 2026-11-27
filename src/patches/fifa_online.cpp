@@ -17,16 +17,13 @@
 
 using namespace std::string_view_literals;
 
-namespace {
 // FIFA 13 EUR base = 0x1010ee00 (the only one seen); other regions are caught by the instruction check below.
-constexpr uint32_t SECURE_SITE   = 0x030e1e24;
-constexpr uint32_t SECURE_ORIG   = 0x38c00001; // li r6, 1
-constexpr uint32_t SECURE_NEW    = 0x38c00000; // li r6, 0
-constexpr uint32_t SECURE_BEFORE = 0x7fa9eb78; // mr r9, r29
-constexpr uint32_t SECURE_AFTER  = 0x38e10018; // addi r7, r1, 24
-constexpr uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the site)
-
-} // namespace
+const uint32_t SECURE_SITE   = 0x030e1e24;
+const uint32_t SECURE_ORIG   = 0x38c00001; // li r6, 1
+const uint32_t SECURE_NEW    = 0x38c00000; // li r6, 0
+const uint32_t SECURE_BEFORE = 0x7fa9eb78; // mr r9, r29
+const uint32_t SECURE_AFTER  = 0x38e10018; // addi r7, r1, 24
+const uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the site)
 
 void patch_fifa_online() {
     // no 'already applied' guard: the plugin outlives game launches, every launch has fresh (unpatched) memory
