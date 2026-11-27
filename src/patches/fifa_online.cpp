@@ -29,9 +29,13 @@ const uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the s
 
 void patch_fifa_online() {
     const uint64_t title_id = OSGetTitleID();
+    bool known = false;
     // no 'already applied' guard: the plugin outlives game launches, every launch has fresh (unpatched) memory
-    if (title_id != FIFA_TITLE_IDS) return; // ponytail: EUR only, add USA/JPN ids once seen on a console
+    for (const uint64_t id : FIFA_TITLE_IDS) known |= (title_id == id);
+    if (!known) return;
     if (!Config::connect_to_network) return;
+
+    // the loader lists the RPX by its internal name (fifazf.rpx), not the file name on disk
     const auto rpx = search_for_rpl("fifazf.rpx"sv);
     if (!rpx) {
         DEBUG_FUNCTION_LINE("FIFA 13 patch skipped: fifazf.rpx not found or not loaded");
