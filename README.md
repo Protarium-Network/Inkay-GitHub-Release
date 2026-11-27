@@ -20,6 +20,8 @@
 - Demaecan
 - Just Dance 2015-2019
 - Lost Reavers
+- Fifa 13
+- Rayman Legends
 - Need for Speed Most Wanted U
 Inkay also includes game-specific patches to add extra features:
 - Modpack-specific matchmaking for global, regional rooms (by simulating extra DLC) - **Mario Kart 8**
