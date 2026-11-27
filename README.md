@@ -20,7 +20,7 @@
 - Demaecan
 - Just Dance 2015-2019
 - Lost Reavers
-- Fifa 13
+- FIFA 13
 - Rayman Legends
 - Need for Speed Most Wanted U
 Inkay also includes game-specific patches to add extra features:
