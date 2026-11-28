@@ -34,18 +34,18 @@ using namespace std::string_view_literals;
 const uint64_t NFS_TITLE_IDS[] = {0x00050000'10128400ull, 0x00050000'10128800ull, 0x00050000'10128900ull,
                                       0x00050000'1012BC00ull};
 
-const uint32_t FN_IS_LOGGED_IN = 0x02c1eb3c; // Hawaii.rpx v32: IsLoggedInToServer
-const uint32_t FN_PROLOGUE[2]  = {0x7c0802a6, 0x9421fff0};   // mflr r0 ; stwu r1, -16(r1)
-const uint32_t SITE            = 0x02c1eb9c;                // clrlwi r3, r0, 24
-const uint32_t SITE_ORIG       = 0x5403063e;
-const uint32_t SITE_NEW        = 0x38600001;                // li r3, 1
-const uint32_t SITE_BEFORE[2]  = {0x5540d97e, 0x68000001};  // rlwinm r0, r10, 27, 5, 31 ; xori r0, r0, 1
+static const uint32_t FN_IS_LOGGED_IN = 0x02c1eb3c; // Hawaii.rpx v32: IsLoggedInToServer
+static const uint32_t FN_PROLOGUE[2]  = {0x7c0802a6, 0x9421fff0};   // mflr r0 ; stwu r1, -16(r1)
+static const uint32_t SITE            = 0x02c1eb9c;                // clrlwi r3, r0, 24
+static const uint32_t SITE_ORIG       = 0x5403063e;
+static const uint32_t SITE_NEW        = 0x38600001;                // li r3, 1
+static const uint32_t SITE_BEFORE[2]  = {0x5540d97e, 0x68000001};  // rlwinm r0, r10, 27, 5, 31 ; xori r0, r0, 1
 
-const uint32_t SECURE_SITE     = 0x030f1308;
-const uint32_t SECURE_ORIG     = 0x38c00001;                // li r6, 1
-const uint32_t SECURE_NEW      = 0x38c00000;                // li r6, 0
-const uint32_t SECURE_BEFORE   = 0x38e10018;                // addi r7, r1, 24
-const uint32_t SECURE_AFTER    = 0x7fc5f378;                // mr r5, r30
+static const uint32_t SECURE_SITE     = 0x030f1308;
+static const uint32_t SECURE_ORIG     = 0x38c00001;                // li r6, 1
+static const uint32_t SECURE_NEW      = 0x38c00000;                // li r6, 0
+static const uint32_t SECURE_BEFORE   = 0x38e10018;                // addi r7, r1, 24
+static const uint32_t SECURE_AFTER    = 0x7fc5f378;                // mr r5, r30
 
 bool applied = false;
 

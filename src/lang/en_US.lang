@@ -1,4 +1,4 @@
-.plugin_name="Protarium"
+.plugin_name="Inkay-Protarium"
 ,.network_category="Network selection"
 ,.connect_to_network_setting="Connect to Protarium Network"
 ,.show_startup_toast_setting="Show startup toast"

@@ -20,12 +20,12 @@ using namespace std::string_view_literals;
 const uint64_t FIFA_TITLE_IDS[] = {0x00050000'1010ee00ull, 0x00050000'1010d900ull};
 
 // FIFA 13 EUR base = 0x1010ee00 (the only one seen); other regions are caught by the instruction check below.
-const uint32_t SECURE_SITE   = 0x030e1e24;
-const uint32_t SECURE_ORIG   = 0x38c00001; // li r6, 1
-const uint32_t SECURE_NEW    = 0x38c00000; // li r6, 0
-const uint32_t SECURE_BEFORE = 0x7fa9eb78; // mr r9, r29
-const uint32_t SECURE_AFTER  = 0x38e10018; // addi r7, r1, 24
-const uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the site)
+static const uint32_t SECURE_SITE   = 0x030e1e24;
+static const uint32_t SECURE_ORIG   = 0x38c00001; // li r6, 1
+static const uint32_t SECURE_NEW    = 0x38c00000; // li r6, 0
+static const uint32_t SECURE_BEFORE = 0x7fa9eb78; // mr r9, r29
+static const uint32_t SECURE_AFTER  = 0x38e10018; // addi r7, r1, 24
+static const uint32_t SECURE_CALL   = 0x4bffa909; // bl 0x030dc738 (2 words after the site)
 
 void patch_fifa_online() {
     const uint64_t title_id = OSGetTitleID();
@@ -33,6 +33,7 @@ void patch_fifa_online() {
     // no 'already applied' guard: the plugin outlives game launches, every launch has fresh (unpatched) memory
     for (const uint64_t id : FIFA_TITLE_IDS) known |= (title_id == id);
     if (!known) return;
+
     if (!Config::connect_to_network) return;
 
     // the loader lists the RPX by its internal name (fifazf.rpx), not the file name on disk

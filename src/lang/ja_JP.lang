@@ -1,4 +1,4 @@
-.plugin_name="Protarium"
+.plugin_name="Inkay-Protarium"
 ,.network_category="ネットワークの選択"
 ,.connect_to_network_setting="Protariumネットワークに接続する"
 ,.show_startup_toast_setting=""

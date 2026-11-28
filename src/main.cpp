@@ -130,8 +130,7 @@ static InkayStatus Inkay_GetStatus() {
 }
 
 static void Inkay_Initialize(bool apply_patches, bool show_startup_toast, inkay_language language) {
-    if (Config::initialized)
-        return;
+    if (Config::initialized) return;
 
     Config::show_startup_toast = show_startup_toast;
 

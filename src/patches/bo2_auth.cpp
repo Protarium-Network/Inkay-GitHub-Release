@@ -25,12 +25,12 @@ static const uint32_t ORIGINAL_BNE      = 0x40820070; // bne 0x02a2e70c
 static const uint32_t BYPASS_BRANCH     = 0x48000070; // b   0x02a2e70c
 
 void patch_bo2_auth() {
-    if (!Config::connect_to_network) return;
-
     const uint64_t title_id = OSGetTitleID();
     if (title_id != BO2_USA_TITLE_ID && title_id != BO2_EUR_TITLE_ID &&
         title_id != BO2_ESIT_TITLE_ID && title_id != BO2_DE_TITLE_ID &&
         title_id != BO2_JPN_TITLE_ID) return;
+
+    if (!Config::connect_to_network) return;
 
     const auto multiplayer = search_for_rpl("t6mp_cafef_rpl.rpl"sv);
     if (!multiplayer) {

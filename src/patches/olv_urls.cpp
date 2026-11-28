@@ -99,7 +99,7 @@ bool setup_olv_libs() {
         return false;
     }
 
-    //wish there was a better way than "blow through MEM2"
+    // wish there was a better way than "blow through MEM2"
     uint32_t base_addr, size;
     if (OSGetMemBound(OS_MEM2, &base_addr, &size)) {
         DEBUG_FUNCTION_LINE("Inkay: OSGetMemBound failed!");

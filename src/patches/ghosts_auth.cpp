@@ -202,17 +202,18 @@ enum class PatchState { Pending, Applied, Unsupported };
 PatchState g_state = PatchState::Pending;
 
 void patch_ghosts_auth() {
-    if (!Config::connect_to_network) return;
-
     if (g_state != PatchState::Pending) return; // applied (or refused) once per game launch
 
     const uint64_t title_id = OSGetTitleID();
     if (title_id != GHOSTS_USA_TITLE_ID && title_id != GHOSTS_EUR_TITLE_ID &&
         title_id != GHOSTS_EUR_ESIT_TITLE_ID && title_id != GHOSTS_JPN_TITLE_ID) return;
 
+    if (!Config::connect_to_network) return;
+
     const auto multiplayer = search_for_rpl("iw6mp_cafef_rpl.rpl"sv);
     if (!multiplayer) {
-        DEBUG_FUNCTION_LINE("Ghosts auth patch skipped: multiplayer RPL not loaded");
+        DEBUG_FUNCTION_LINE("Ghosts auth patch skipped: iw6mp_cafef_rpl.rpl not found or not loaded");
+        ShowNotification("Ghosts: iw6mp_cafef_rpl.rpl not found or not loaded, patch skipped");
         return;
     }
 
