@@ -39,7 +39,7 @@
 
 #include "ca_pem.h"
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r27-fifa"
+#define INKAY_VERSION "v3.1.0-protarium-online-r28-nba2k13"
 
 /**
     Mandatory plugin information.
@@ -68,6 +68,7 @@ WUMS_USE_WUT_DEVOPTAB();
 #include "patches/ghosts_auth.h"
 #include "patches/nfs_online.h"
 #include "patches/fifa_online.h"
+#include "patches/nba_online.h"
 #include "patches/mc_secure.h"
 #include "patches/justdance_cert.h"
 #include "patches/lost_reavers_url.h"
@@ -229,6 +230,7 @@ WUMS_ALL_APPLICATION_STARTS_DONE() {
     patch_ghosts_auth();
     patch_nfs_online();
     patch_fifa_online();
+    patch_nba_online();
     patch_mc_secure();
     patch_justdance_cert();
     peertopeer_patch();

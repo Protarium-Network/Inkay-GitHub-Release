@@ -121,4 +121,13 @@
 #define PURECHESS_AGS_HOST "jd." NETWORK_BASEURL
 #endif
 
+// NBA 2K13 (Wii U): Visual Concepts' own BOSS/VCNETMARE HTTP backend, found
+// verbatim in nba_clean_opt_update.rpx/NBA_CLEAN_OPT_GAME.rpx. DNS-only
+// redirect; whatever Blaze redirector/game-server traffic needs separately
+// still has no confirmed hostname/port (see nba_online.cpp and
+// nba2k13-wiiu-server's README - that part needs a real console capture).
+#ifndef NBA2K13_HOST
+#define NBA2K13_HOST "nba2k13." NETWORK_BASEURL
+#endif
+
 #endif //INKAY_INKAY_CONFIG_H

@@ -71,6 +71,12 @@ constexpr std::pair<const char *, const char *> dns_replacements[] = {
         // Demae-Can Wii U channel replacement backend
         { "nws.demae-can.com", DEMAECAN_HOST },
 
+        // NBA 2K13 (Wii U): Visual Concepts' own BOSS/VCNETMARE HTTP backend
+        // - DNS-only, found verbatim in both RPX files. Original Host header
+        // kept. The Blaze game-server side is separate and still unconfirmed
+        // (see nba_online.cpp / nba2k13-wiiu-server's README).
+        { "nba2k13.wii2.2ksports.com", NBA2K13_HOST },
+
         // BOSS (Background Online Storage Service) - SpotPass, tasksheets,
         // StreetPass relay, standby-mode notification delivery.
         { "npdi.cdn.nintendo.net", BOSS_NPDI_HOST },

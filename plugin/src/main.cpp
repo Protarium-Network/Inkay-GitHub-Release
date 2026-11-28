@@ -28,7 +28,7 @@ void LostReavers_Deinit();
 void LostReavers_OnStart();
 void LostReavers_OnEnd();
 
-#define INKAY_VERSION "v3.1.0-protarium-online-r27-fifa"
+#define INKAY_VERSION "v3.1.0-protarium-online-r28-nba2k13"
 
 /**
     Mandatory plugin information.
